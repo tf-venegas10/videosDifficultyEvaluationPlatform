@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import "./Evaluation.css";
 import ReactPlayer from 'react-player';
+import FormEval from "./FormEval";
 
 
 // App component - represents the whole app
@@ -47,6 +48,8 @@ export default class Evaluation extends Component {
                     <ReactPlayer url={this.state.resource.url} playing />
                     {videoFooter}
                 </blockquote>
+
+                <FormEval/>
 
             </div>
 

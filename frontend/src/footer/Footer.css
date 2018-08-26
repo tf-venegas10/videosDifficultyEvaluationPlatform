@@ -1,0 +1,14 @@
+footer#site-footer {
+    background-color: #f5f5f5;
+    line-height: 70px;
+}
+
+footer#site-footer img {
+    height: 50px;
+    filter: none;
+    transition: all 0.3s
+}
+
+footer#site-footer img:hover {
+    filter: opacity(50%);
+}
