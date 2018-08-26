@@ -45,7 +45,14 @@ export default class Evaluation extends Component {
                         <source src={this.state.resource.url} type="video/mp4"/>
                             {track}
                     </video>*/}
-                    <ReactPlayer url={this.state.resource.url} playing />
+                    <div className="row">
+                        <div className="col-sm-1 col-md-2"></div>
+                        <div className="col-sm-9 col-md-6">
+                            <ReactPlayer url={this.state.resource.url} playing/>
+                        </div>
+                        <div className="col-sm-2 col-md-4"></div>
+
+                    </div>
                     {videoFooter}
                 </blockquote>
 
@@ -53,8 +60,8 @@ export default class Evaluation extends Component {
 
             </div>
 
-    );
+        );
 
     }
 
-    }
+}
