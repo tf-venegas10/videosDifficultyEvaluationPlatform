@@ -15,10 +15,16 @@ export default class Evaluation extends Component {
             resource: {
                 title: "REACTing",
                 subtitleURL: "nuay",
-                url: "https://www.youtube.com/watch?v=2zn4dAuZ2RU",
+                url: "./resources/testVideo.mp4",
                 lesson: "rumbear"
-            }
+            },
+            play:false,
         }
+        this.toggleVideo=this.toggleVideo.bind(this);
+    }
+
+    toggleVideo(){
+        this.setState((prevState)=>({play:! prevState.play})    );
     }
 
 
@@ -48,7 +54,7 @@ export default class Evaluation extends Component {
                     <div className="row">
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-9 col-md-6">
-                            <ReactPlayer url={this.state.resource.url} playing/>
+                            <ReactPlayer url={this.state.resource.url} playing={this.state.play} onClick={this.toggleVideo}/>
                         </div>
                         <div className="col-sm-2 col-md-4"></div>
 

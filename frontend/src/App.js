@@ -19,6 +19,7 @@ class App extends Component {
     }
     render() {
         return (
+
             <div>
                 <Header user={this.state.user}/>
                 {this.state.user.is_authenticated?
@@ -29,6 +30,8 @@ class App extends Component {
                 }
                 <Footer/>
             </div>
+
+
         )
     }
 }
