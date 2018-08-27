@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Button, FormGroup, FormControl, ControlLabel} from "react-bootstrap";
 
+import "./Auth.css";
+
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -24,14 +26,17 @@ export default class Login extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        this.state.onSubmit(this.state.email,this.state.password);
+        this.state.onSubmit(this.state.email, this.state.password);
     }
 
     render() {
         return (
-            <div className="container-fluid banner">
+            <div className="container-fluid form-base">
                 <div className="row justify-content-around banner-content">
                     <form onSubmit={this.handleSubmit} className="col-6 center-items">
+                        <div className="row justify-content-around">
+                            <h3>Login</h3>
+                        </div>
                         <FormGroup controlId="email" bsSize="large">
                             <ControlLabel className="auth-text">Email</ControlLabel>
                             <FormControl
