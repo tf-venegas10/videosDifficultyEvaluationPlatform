@@ -50,7 +50,7 @@ server.get("/API/signup/:userData", (req, res) => {
     let decoded = base64.decode(encoded);
     let params = utf8.decode(decoded).split(";;;");
 
-    let connection = mysql.createConnection(process.env.JAWSDB_URL);
+    let connection = mysql.createConnection(process.env.DB_URL);
     connection.connect();
     try {
         connection.query('INSERT INTO USERS (NAME, LASTNAME, EMAIL, PASSWORD) ' +
