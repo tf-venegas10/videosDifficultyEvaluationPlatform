@@ -60,11 +60,25 @@ export default class FormEval extends Component {
                                         onClick={this.onSelect.bind(this, "VeryEasy")}/>Very
                                         Easy</label>
                                 </div>
-                                <div className="text-center">
-                                    <button type="button" className="btn btn-info partial-validation submit"><span
-                                        className="fa fa-check"></span> Submit
-                                    </button>
+
+
+                            </div>
+                            <div className="row">
+                                <label className="col-sm-3 col-form-label"><strong>What concepts did you identified</strong></label>
+                                <div className="col-sm-9">
+                                    <select multiple data-role="tagsinput">
+                                        <option value="Amsterdam">Amsterdam</option>
+                                        <option value="Washington">Washington</option>
+                                        <option value="Sydney">Sydney</option>
+                                        <option value="Beijing">Beijing</option>
+                                        <option value="Cairo">Cairo</option>
+                                        </select>
                                 </div>
+                            </div>
+                            <div className="text-center">
+                                <button type="button" className="btn btn-info partial-validation submit"><span
+                                    className="fa fa-check"></span> Submit
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -22,12 +22,12 @@ export default class Signup extends Component {
         this.setState({
             [event.target.id]: event.target.value
         });
-    }
+    };
 
     handleSubmit = event => {
         event.preventDefault();
         this.state.onSubmit(this.state.name, this.state.lastName, this.state.email, this.state.password);
-    }
+    };
 
     render() {
         return (
@@ -48,7 +48,7 @@ export default class Signup extends Component {
                             <FormControl
                                 autoFocus
                                 type="text"
-                                value={this.state.name}
+                                value={this.state.lastName}
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
