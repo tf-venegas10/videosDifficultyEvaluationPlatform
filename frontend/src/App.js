@@ -5,6 +5,8 @@ import Header from "./header/Header";
 import Evaluation from "./evaluation/Evaluation";
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
+import Base64 from "base-64";
+import Utf8 from "utf8";
 
 class App extends Component {
     constructor(props){
@@ -86,7 +88,7 @@ class App extends Component {
         return (
 
             <div>
-                <Header user={this.state.userName}/>
+                <Header first_name={this.state.userName} is_authenticated={this.state.is_authenticated}/>
                 {this.state.user.is_authenticated?
                 <Evaluation/>
                 :
