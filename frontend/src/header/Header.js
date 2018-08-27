@@ -41,23 +41,6 @@ export default class Header extends Component {
 
                         {this.props.user.is_authenticated && this.props.user.is_superuser ?
                             <ul className="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-                                <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" href="" id="nav-dropdown" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false"><span
-                                        className="fa fa-download"></span> Data</a>
-                                    <div className="dropdown-menu" aria-labelledby="nav-dropdown">
-                                        <a className="dropdown-item" href="{% url 'dataResources' %}" target="_blank"><span
-                                            className="fa fa-file mr-2"></span> Resources</a>
-                                        <a className="dropdown-item" href="{% url 'dataSurveys' %}" target="_blank"><span
-                                            className="fa fa-question-circle mr-2"></span> Surveys</a>
-                                        <a className="dropdown-item" href="{% url 'dataEvaluations' %}"
-                                           target="_blank"><span className="fa fa-check-square mr-2"></span> Evaluations</a>
-                                    </div>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link p-2" href="{% url 'admin:index' %}" target="_blank"><span
-                                        className="fa fa-wrench"></span> Admin</a>
-                                </li>
                                 <li className="nav-item">
                                     <a className="nav-link p-2" href="{% url 'logout' %}"><span
                                         className="fa fa-sign-out"></span> Logout</a>
