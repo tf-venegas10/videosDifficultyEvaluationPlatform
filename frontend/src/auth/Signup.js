@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Button, FormGroup, FormControl, ControlLabel} from "react-bootstrap";
 
+import "./Auth.css";
+
 export default class Signup extends Component {
     constructor(props) {
         super(props);
@@ -31,9 +33,12 @@ export default class Signup extends Component {
 
     render() {
         return (
-            <div className="container-fluid banner">
+            <div className="container-fluid form-base">
                 <div className="row justify-content-around banner-content">
                     <form onSubmit={this.handleSubmit} className="col-6">
+                        <div className="row justify-content-around">
+                            <h3>Sign Up</h3>
+                        </div>
                         <FormGroup controlId="name" bsSize="large">
                             <ControlLabel className="auth-text">First Name</ControlLabel>
                             <FormControl
