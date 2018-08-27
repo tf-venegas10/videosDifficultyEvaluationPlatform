@@ -48,7 +48,7 @@ export default class Signup extends Component {
                             <FormControl
                                 autoFocus
                                 type="text"
-                                value={this.state.name}
+                                value={this.state.lastName}
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
