@@ -9,7 +9,8 @@
     "react-player": "^1.6.4",
     "react-scripts": "1.1.5",
     "react-bootstrap": "^0.32.3",
-    "prop-types": "^15.6.2"
+    "prop-types": "^15.6.2",
+    "babel-core": "^6.26.3"
   },
   "scripts": {
     "start": "react-scripts start",
