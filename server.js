@@ -72,12 +72,12 @@ server.get("/API/signup/:userData", (req, res) => {
                 throw err;
             }
         });
-        connection.query('SELECT ID, NAME FROM USERS WHERE EMAIL=\'' + params[1] + '\';', (err, rows, fields) => {
+        connection.query('SELECT ID, NAME FROM USERS WHERE EMAIL=\'' + params[2] + '\';', (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 return;
             }
-            print(rows[0]);
+            console.log(rows[0]);
             let user = {
                 id: rows[0].ID,
                 name: rows[0].NAME,
