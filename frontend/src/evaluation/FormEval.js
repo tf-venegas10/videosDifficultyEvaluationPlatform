@@ -28,6 +28,9 @@ export default class FormEval extends Component {
                     <div className="card">
 
                         <div data-parent="#accordion">
+                    <div className="card-body survey-part row">
+                    What was the level of dificulty you felt when seeing the video?
+                     </div>
                             <div className="card-body survey-part row">
                                 <div className="form-check form-check-inline col-sm-2">
                                     <label htmlFor="VeryDifficult" className="form-check-label"><input
@@ -94,6 +97,9 @@ export default class FormEval extends Component {
 
 
 
+                            </div>
+                            <div className="card-body survey-part row">
+                                What topics did you identified on the video?
                             </div>
                             <div className="row">
                                 <label className="col-sm-3 col-form-label"><strong>What concepts did you identified</strong></label>

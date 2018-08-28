@@ -108,3 +108,4 @@ venv.bak/
 /frontend/yarn.lock
 
 /.idea/
+.idea/
