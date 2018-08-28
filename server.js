@@ -7,6 +7,7 @@ let bodyParser = require('body-parser');
 const utf8 = require("utf8");
 const base64 = require("base-64");
 const mysql = require('mysql');
+const CRUD = require("./CRUD");
 
 const server = express();
 
@@ -93,6 +94,19 @@ server.get("/API/signup/:userData", (req, res) => {
         connection.end();
     }
 
+});
+
+server.get("/API/concepts", (req, res) => {
+    let connection = mysql.createConnection({
+        insecureAuth: true,
+        host: "localhost",
+        user: "root",
+        password: process.env.DB_PW,
+        database: "dajee"
+    });
+    CRUD.getConcepts(connection,(rows)=>{
+        res.send(rows);
+    });
 });
 
 server.listen(process.env.PORT || 3001, () => {
