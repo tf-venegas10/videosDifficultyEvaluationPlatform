@@ -35,10 +35,10 @@ server.get("/API/login/:userData", (req, res) => {
     connection.query('SELECT * FROM USERS WHERE EMAIL=\'' + params[0] + '\';', (err, rows, fields) => {
         if (err) {
             console.log(err);
-            throw new Error("User not found");
+            throw new Error("Something went wrong with DB");
         }
         let user = null;
-        if (rows[0].PASSWORD === params[1]) {
+        if (rows[0] && rows[0].PASSWORD === params[1]) {
             user = {
                 id: rows[0].ID,
                 name: rows[0].NAME,
