@@ -51,9 +51,11 @@ server.get("/API/signup/:userData", (req, res) => {
     let params = utf8.decode(decoded).split(";;;");
 
     let connection = mysql.createConnection({
+        insecureAuth : true,
         host: "localhost",
         user: "root",
-        password: process.env.DB_PW
+        password: process.env.DB_PW,
+        database: "DAJEE"
     });
     connection.connect();
     try {
