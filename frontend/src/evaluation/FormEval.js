@@ -8,12 +8,16 @@ export default class FormEval extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: "none"
+            selected: "none",
+            selectedKnowledge:"none"
         }
     }
 
     onSelect(name) {
         this.setState({selected: name});
+    }
+    onSelectKnowledge(name){
+        this.setState({selectedKnowledge: name});
     }
 
     render() {
@@ -60,6 +64,34 @@ export default class FormEval extends Component {
                                         onClick={this.onSelect.bind(this, "VeryEasy")}/>Very
                                         Easy</label>
                                 </div>
+
+
+                            </div>
+                            <div className="card-body survey-part row">
+                                What was your level of knowledge of the topics treated?
+                            </div>
+                            <div className="card-body survey-part row">
+                                <div className="form-check form-check-inline col-sm-2">
+                                    <label htmlFor="Unknown" className="form-check-label"><input
+                                        className="form-check-input" type="radio"
+                                        checked={this.state.selectedKnowledge === "Unknown"} id="Unknown"
+                                        onClick={this.onSelectKnowledge.bind(this, "Unknown")}/>Unknown</label>
+                                </div>
+                                <div className="form-check form-check-inline col-sm-2">
+                                    <label htmlFor="Familiar" className="form-check-label"><input
+                                        className="form-check-input" type="radio"
+                                        checked={this.state.selectedKnowledge === "Familiar"}
+                                        id="Familiar"
+                                        onClick={this.onSelectKnowledge.bind(this, "Familiar")}/> Familiar</label>
+                                </div>
+                                <div className="form-check form-check-inline col-sm-2">
+                                    <label htmlFor="veryKnown" className="form-check-label"><input
+                                        className="form-check-input" type="radio"
+                                        checked={this.state.selectedKnowledge === "veryKnown"}
+                                        id="veryKnown"
+                                        onClick={this.onSelectKnowledge.bind(this, "veryKnown")}/>Very known</label>
+                                </div>
+
 
 
                             </div>
