@@ -24,7 +24,13 @@ server.get("/API/login/:userData", (req, res) => {
     let decoded = base64.decode(encoded);
     let params = utf8.decode(decoded).split(";;;");
 
-    let connection = mysql.createConnection(process.env.DB_URL);
+    let connection = mysql.createConnection({
+        insecureAuth: true,
+        host: "localhost",
+        user: "root",
+        password: process.env.DB_PW,
+        database: "dajee"
+    });
     connection.connect();
     connection.query('SELECT * FROM USERS WHERE EMAIL=\'' + params[0] + '\';', (err, rows, fields) => {
         if (err) {
@@ -51,11 +57,11 @@ server.get("/API/signup/:userData", (req, res) => {
     let params = utf8.decode(decoded).split(";;;");
 
     let connection = mysql.createConnection({
-        insecureAuth : true,
+        insecureAuth: true,
         host: "localhost",
         user: "root",
         password: process.env.DB_PW,
-        database: "DAJEE"
+        database: "dajee"
     });
     connection.connect();
     try {
@@ -71,7 +77,7 @@ server.get("/API/signup/:userData", (req, res) => {
                 console.log(err);
                 return;
             }
-
+            print(rows[0]);
             let user = {
                 id: rows[0].ID,
                 name: rows[0].NAME,

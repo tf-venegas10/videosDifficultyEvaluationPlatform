@@ -36,11 +36,13 @@ class App extends Component {
             .then(user => {
                 this.setState((prevState) => {
                         return {
-                            idUser: user.id,
-                            userName: user.name,
-                            userMail: user.email,
-                            is_authenticated: true,
-                            navbar: 'user',
+                            user: {
+                                idUser: user.id,
+                                userName: user.name,
+                                userMail: user.email,
+                                is_authenticated: true,
+                                navbar: 'user',
+                            }
                         };
                     }
                 );
@@ -59,11 +61,13 @@ class App extends Component {
             .then((user) => {
                 this.setState(() => {
                         return {
-                            idUser: user.id,
-                            userName: user.name,
-                            userMail: user.email,
-                            is_authenticated: true,
-                            navbar: 'user',
+                            user: {
+                                idUser: user.id,
+                                userName: user.name,
+                                userMail: user.email,
+                                is_authenticated: true,
+                                navbar: 'user',
+                            }
                         };
                     }
                 );
@@ -74,11 +78,13 @@ class App extends Component {
     onLogout(){
         this.setState((prevState) => {
                 return {
-                    idUser: null,
-                    userName: null,
-                    userMail: null,
-                    is_authenticated: false,
-                    navbar: 'index',
+                    user: {
+                        idUser: null,
+                        userName: null,
+                        userMail: null,
+                        is_authenticated: false,
+                        navbar: 'index',
+                    }
                 };
             }
         );
@@ -88,16 +94,16 @@ class App extends Component {
         return (
 
             <div>
-                <Header first_name={this.state.userName} is_authenticated={this.state.is_authenticated}/>
+                <Header user={this.state.user} onLogout={this.onLogout.bind(this)}/>
                 {this.state.user.is_authenticated?
                 <Evaluation/>
                 :
                     <div className="row">
                         <div className="col-6">
-                            <Login onSubmit={this.onSubmitLogin}/>
+                            <Login onSubmit={this.onSubmitLogin.bind(this)}/>
                         </div>
                         <div className="col-6">
-                            <Signup onSubmit={this.onSubmitSignup}/>
+                            <Signup onSubmit={this.onSubmitSignup.bind(this)}/>
                         </div>
                     </div>
                 }

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
+    "eslint": "^5.4.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-player": "^1.6.4",

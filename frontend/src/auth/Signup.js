@@ -8,8 +8,8 @@ export default class Signup extends Component {
         super(props);
 
         this.state = {
-            email: "",
-            password: "",
+            emailS: "",
+            passwordS: "",
             name: "",
             lastName: "",
             onSubmit: this.props.onSubmit,
@@ -17,7 +17,7 @@ export default class Signup extends Component {
     }
 
     validateForm() {
-        return this.state.email.length > 0 && this.state.password.length > 0 && this.state.name.length > 0 && this.state.lastName.length > 0;
+        return this.state.emailS.length > 0 && this.state.passwordS.length > 0 && this.state.name.length > 0 && this.state.lastName.length > 0;
     }
 
     handleChange = (event) => {
@@ -28,7 +28,7 @@ export default class Signup extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        this.state.onSubmit(this.state.name, this.state.lastName, this.state.email, this.state.password);
+        this.state.onSubmit(this.state.name, this.state.lastName, this.state.emailS, this.state.passwordS);
     };
 
     render() {
@@ -57,19 +57,19 @@ export default class Signup extends Component {
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
-                        <FormGroup controlId="email" bsSize="large">
+                        <FormGroup controlId="emailS" bsSize="large">
                             <ControlLabel className="auth-text">Email</ControlLabel>
                             <FormControl
                                 autoFocus
                                 type="email"
-                                value={this.state.email}
+                                value={this.state.emailS}
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
-                        <FormGroup controlId="password" bsSize="large">
+                        <FormGroup controlId="passwordS" bsSize="large">
                             <ControlLabel className="auth-text">Password</ControlLabel>
                             <FormControl
-                                value={this.state.password}
+                                value={this.state.passwordS}
                                 onChange={this.handleChange}
                                 type="password"
                             />
