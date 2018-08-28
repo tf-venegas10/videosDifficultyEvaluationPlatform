@@ -13,8 +13,8 @@ class App extends Component {
         super(props);
         this.state={
             user:{
-                is_authenticated:false,
-                is_superuser:true,
+                is_authenticated:true,
+                is_superuser:false,
                 numberResourcesEvaluated:5,
                 idUser: null,
                 userName: null,
