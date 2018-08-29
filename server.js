@@ -7,6 +7,7 @@ let bodyParser = require('body-parser');
 const utf8 = require("utf8");
 const base64 = require("base-64");
 const mysql = require('mysql');
+const CRUD = require("./CRUD");
 
 const server = express();
 
@@ -24,15 +25,21 @@ server.get("/API/login/:userData", (req, res) => {
     let decoded = base64.decode(encoded);
     let params = utf8.decode(decoded).split(";;;");
 
-    let connection = mysql.createConnection(process.env.DB_URL);
+    let connection = mysql.createConnection({
+        insecureAuth: true,
+        host: "localhost",
+        user: "root",
+        password: process.env.DB_PW,
+        database: "dajee"
+    });
     connection.connect();
     connection.query('SELECT * FROM USERS WHERE EMAIL=\'' + params[0] + '\';', (err, rows, fields) => {
         if (err) {
             console.log(err);
-            throw new Error("User not found");
+            throw new Error("Something went wrong with DB");
         }
         let user = null;
-        if (rows[0].PASSWORD === params[1]) {
+        if (rows[0] && rows[0].PASSWORD === params[1]) {
             user = {
                 id: rows[0].ID,
                 name: rows[0].NAME,
@@ -51,11 +58,11 @@ server.get("/API/signup/:userData", (req, res) => {
     let params = utf8.decode(decoded).split(";;;");
 
     let connection = mysql.createConnection({
-        insecureAuth : true,
+        insecureAuth: true,
         host: "localhost",
         user: "root",
         password: process.env.DB_PW,
-        database: "DAJEE"
+        database: "dajee"
     });
     connection.connect();
     try {
@@ -66,12 +73,12 @@ server.get("/API/signup/:userData", (req, res) => {
                 throw err;
             }
         });
-        connection.query('SELECT ID, NAME FROM USERS WHERE EMAIL=\'' + params[1] + '\';', (err, rows, fields) => {
+        connection.query('SELECT ID, NAME FROM USERS WHERE EMAIL=\'' + params[2] + '\';', (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 return;
             }
-
+            console.log(rows[0]);
             let user = {
                 id: rows[0].ID,
                 name: rows[0].NAME,
@@ -87,6 +94,19 @@ server.get("/API/signup/:userData", (req, res) => {
         connection.end();
     }
 
+});
+
+server.get("/API/concepts", (req, res) => {
+    let connection = mysql.createConnection({
+        insecureAuth: true,
+        host: "localhost",
+        user: "root",
+        password: process.env.DB_PW,
+        database: "dajee"
+    });
+    CRUD.getConcepts(connection,(rows)=>{
+        res.send(rows);
+    });
 });
 
 server.listen(process.env.PORT || 3001, () => {

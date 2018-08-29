@@ -21,11 +21,11 @@ export default class Header extends Component {
                         <a href="{% url 'home' %}" className="navbar-brand mr-0 mr-md-5"><strong>ALMA-DAJEE
                             Evaluation</strong></a>
 
-                        {this.props.is_authenticated ?
+                        {this.props.user.is_authenticated ?
                             <div className="navbar-nav-scroll">
                                 <ul className="navbar-nav bd-navbar-nav flex-row">
                                     <li className="nav-item mr-3">
-                                        <a className="nav-link" title="">Hi, {this.props.first_name}!</a>
+                                        <a className="nav-link" title="">Hi, {this.props.user.userName}!</a>
                                     </li>
                                     {(this.props.user.numberResourcesEvaluated > 0) ?
                                         <li className="nav-item mr-3">
@@ -39,10 +39,10 @@ export default class Header extends Component {
                             : <div></div>}
 
 
-                        {this.props.is_authenticated ?
+                        {this.props.user.is_authenticated ?
                             <ul className="navbar-nav flex-row ml-md-auto d-none d-md-flex">
                                 <li className="nav-item">
-                                    <a className="nav-link p-2" href="{% url 'logout' %}"><span
+                                    <a className="nav-link p-2" onClick={this.props.onLogout}><span
                                         className="fa fa-sign-out"></span> Logout</a>
                                 </li>
                             </ul>
