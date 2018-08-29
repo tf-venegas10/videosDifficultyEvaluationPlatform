@@ -19,6 +19,9 @@ export default class FormEval extends Component {
     onSelectKnowledge(name){
         this.setState({selectedKnowledge: name});
     }
+    componentDidMount(){
+        fetch()
+    }
 
     render() {
 
