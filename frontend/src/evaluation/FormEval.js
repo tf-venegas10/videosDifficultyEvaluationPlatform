@@ -9,7 +9,8 @@ export default class FormEval extends Component {
         super(props);
         this.state = {
             selected: "none",
-            selectedKnowledge:"none"
+            selectedKnowledge:"none",
+            concepts:[]
         }
     }
 
@@ -20,10 +21,22 @@ export default class FormEval extends Component {
         this.setState({selectedKnowledge: name});
     }
     componentDidMount(){
-        fetch()
+        fetch("/API/concepts")
+            .then(res => {
+                return (res.json());
+            })
+            .then(concepts => {
+                this.setState({concepts:concepts});
+            })
+            .catch((err) => console.log(err));
     }
 
     render() {
+
+        let listConcepts=[];
+        this.state.concepts.forEach((c)=>{
+           listConcepts.append(<option value={c}>{c}</option>);
+        });
 
         return (
             <div id="accordion" className="mt-5 mb-5">
@@ -108,12 +121,8 @@ export default class FormEval extends Component {
                                 <label className="col-sm-3 col-form-label"><strong>What concepts did you identified</strong></label>
                                 <div className="col-sm-9">
                                     <select multiple data-role="tagsinput">
-                                        <option value="Amsterdam">Amsterdam</option>
-                                        <option value="Washington">Washington</option>
-                                        <option value="Sydney">Sydney</option>
-                                        <option value="Beijing">Beijing</option>
-                                        <option value="Cairo">Cairo</option>
-                                        </select>
+                                        {listConcepts}
+                                    </select>
                                 </div>
                             </div>
                             <div className="text-center">
