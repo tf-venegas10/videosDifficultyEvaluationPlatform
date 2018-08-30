@@ -29,7 +29,7 @@
     delimiterRegex: null,
     cancelConfirmKeysOnEmpty: false,
     onTagExists: function(item, $tag) {
-      $tag.hide().fadeIn();
+      $tag.addClass('sr-only');
     },
     trimValue: false,
     allowDuplicates: false,
@@ -44,7 +44,7 @@
     this.itemsArray = [];
 
     this.$element = $(element);
-    this.$element.hide();
+    this.$element.addClass('sr-only');
 
     this.isSelect = (element.tagName === 'SELECT');
     this.multiple = (this.isSelect && element.hasAttribute('multiple'));
@@ -275,7 +275,7 @@
             return self.options.itemValue(item).toString();
           });
 
-      self.$element.val(val, true);
+      self.$element.val( val.join(self.options.delimiter) );
 
       if (self.options.triggerChange)
         self.$element.trigger('change');
@@ -350,25 +350,12 @@
 
       // typeahead.js
       if (self.options.typeaheadjs) {
-		var typeaheadConfig = null;
-		var typeaheadDatasets = {};
-		
-		// Determine if main configurations were passed or simply a dataset
+        // Determine if main configurations were passed or simply a dataset
         var typeaheadjs = self.options.typeaheadjs;
-        
-		/*
-		if (!$.isArray(typeaheadjs)) {
+        if (!$.isArray(typeaheadjs)) {
             typeaheadjs = [null, typeaheadjs];
         }
-		*/
-		if ($.isArray(typeaheadjs)) {
-			typeaheadConfig = typeaheadjs[0];
-			typeaheadDatasets = typeaheadjs[1];
-		} else {
-			typeaheadDatasets = typeaheadjs;
-		}
 
-		/*
         $.fn.typeahead.apply(self.$input, typeaheadjs).on('typeahead:selected', $.proxy(function (obj, datum, name) {
           var index = 0;
           typeaheadjs.some(function(dataset, _index) {
@@ -388,16 +375,6 @@
 
           self.$input.typeahead('val', '');
         }, self));
-		*/
-		
-		self.$input.typeahead(typeaheadConfig, typeaheadDatasets).on('typeahead:selected', $.proxy(function (obj, datum) {
-		            if (typeaheadDatasets.valueKey)
-		              self.add(datum[typeaheadDatasets.valueKey]);
-		            else
-		              self.add(datum);
-		            self.$input.typeahead('val', '');
-		          }, self));
-		
       }
 
       self.$container.on('click', $.proxy(function(event) {

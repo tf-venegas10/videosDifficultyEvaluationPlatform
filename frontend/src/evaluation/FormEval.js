@@ -34,8 +34,16 @@ export default class FormEval extends Component {
     render() {
 
         let listConcepts=[];
-        
-        this.state.concepts.forEach((c)=>{
+
+        this.state.concepts.sort((a,b)=>{
+            if (b.label<a.label){
+                return 1;
+            }
+            else{
+                return -1;
+            }
+        })
+            .forEach((c)=>{
 
            listConcepts.push(<option key={c.id} value={c.uri}>{c.label}</option>);
 

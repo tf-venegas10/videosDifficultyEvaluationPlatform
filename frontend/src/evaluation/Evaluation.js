@@ -16,7 +16,8 @@ export default class Evaluation extends Component {
                 title: "REACTing",
                 subtitleURL: "nuay",
                 url: "./resources/testVideo.mp4",
-                lesson: "rumbear"
+                lesson: "rumbear",
+                pauses: 0
             },
             play:false,
         }
@@ -27,6 +28,9 @@ export default class Evaluation extends Component {
         this.setState((prevState)=>({play:! prevState.play})    );
     }
 
+    onPauseCallback(){
+        this.setState()
+    }
 
     render() {
         let track = null;
@@ -54,7 +58,8 @@ export default class Evaluation extends Component {
                     <div className="row">
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-9 col-md-6">
-                            <ReactPlayer url={this.state.resource.url} playing={this.state.play} onClick={this.toggleVideo}/>
+                            <ReactPlayer url={this.state.resource.url} playing={this.state.play} onClick={this.toggleVideo}
+                            controls={true}/>
                         </div>
                         <div className="col-sm-2 col-md-4"></div>
 
