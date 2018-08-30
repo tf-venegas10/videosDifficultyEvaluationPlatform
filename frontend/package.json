@@ -7,7 +7,6 @@
     "base-64": "^0.1.0",
     "bootstrap": "^4.0.0-alpha.6",
     "eslint": "^5.4.0",
-    "multi-select-react": "^0.1.8",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-bootstrap": "^0.32.3",

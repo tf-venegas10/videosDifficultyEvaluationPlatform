@@ -15,10 +15,11 @@ const server = express();
 //server.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 server.use(logger('dev'));
 server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.urlencoded({extended: true}));
 server.use(cookieParser());
 server.use(express.static(path.join(__dirname, 'frontend/build')));
 
+let vids_to_check = {ids:[1, 2, 3]};
 
 server.get("/API/login/:userData", (req, res) => {
     let encoded = req.params.userData;
@@ -67,7 +68,7 @@ server.get("/API/signup/:userData", (req, res) => {
     connection.connect();
     try {
         connection.query('INSERT INTO USERS (NAME, LASTNAME, EMAIL, PASSWORD) ' +
-            'VALUES (\'' + params[0] + '\',\'' + params[1] + '\',\'' + params[2] + '\',\''+params[3]+'\');', (err, rows, fields) => {
+            'VALUES (\'' + params[0] + '\',\'' + params[1] + '\',\'' + params[2] + '\',\'' + params[3] + '\');', (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 throw err;
@@ -104,12 +105,17 @@ server.get("/API/concepts", (req, res) => {
         password: process.env.DB_PW,
         database: "dajee"
     });
-    CRUD.getConcepts(connection,(rows)=>{
+    CRUD.getConcepts(connection, (rows) => {
         res.send(rows);
     });
 });
 
 server.get("/API/learning_resources", (req, res) => {
+    res.send(vids_to_check)
+});
+
+server.get("/API/learning_resources/:resourceId", (req, res) => {
+    let resourceId = req.params.resourceId;
     let connection = mysql.createConnection({
         insecureAuth: true,
         host: process.env.LR_HOST,
@@ -117,8 +123,14 @@ server.get("/API/learning_resources", (req, res) => {
         password: process.env.LR_PW,
         database: process.env.LR_DB
     });
-    CRUD.getLearningResources(connection,(rows)=>{
-        res.send(rows);
+    CRUD.getLearningResource(connection, resourceId, (rows) => {
+        if (rows[0]) {
+            let emailRegex = /^\.((t(x(t)?)?)|(e(n)?)|(s(r(t)?)?))(\.(t(x(t)?)?)?)?$/;
+            rows[0] = rows[0].replace("/Users/rubenmanrique/Dropbox/DoctoradoAndes/Investigacion/Course Sequences Dataset/CourseraTexto/",
+                "C:/Coursera/").replace("/Users/rubenmanrique/Downloads/CourseraTexto/", "C:/Coursera/");
+            rows[0].path = rows[0].path.replace(emailRegex, ".mp4");
+        }
+        res.send(rows[0]);
     });
 });
 

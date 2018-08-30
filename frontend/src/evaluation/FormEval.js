@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import "./FormEval.css";
-import  MultiSelectReact  from 'multi-select-react';
 import Select from 'react-select';
 // App component - represents the whole app
 
@@ -52,8 +51,7 @@ export default class FormEval extends Component {
         })
             .forEach((c)=>{
 
-           listConcepts.push(<option key={c.id} value={c.uri}>{c.label}</option>);
-
+                listConcepts.push({value:c.uri, label:c.label});
         });
         const selectedOptionsStyles = {
             color: "#3c763d",
@@ -143,26 +141,15 @@ export default class FormEval extends Component {
                             <div className="card-body survey-part row">
                                 What topics did you identified on the video?
                             </div>
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <select multiple data-role="tagsinput">
-                                        {listConcepts}
-                                    </select>
 
-                                </div>
-                            </div>
-                            <MultiSelectReact
-                                options={this.state.concepts}
-                                optionClicked={this.optionClicked.bind(this)}
-                                selectedBadgeClicked={this.selectedBadgeClicked.bind(this)}
-                                selectedOptionsStyles={selectedOptionsStyles}
-                                optionsListStyles={optionsListStyles} />
+
 
                             <Select
-                                value={this.state.selected}
-                                onChange={this.handleChange}
-                                options={this.state.concepts}
-                                isMulti={true}
+                                isMulti
+                                name="topics"
+                                options={listConcepts}
+                                className="basic-multi-select"
+                                classNamePrefix="select"
                             />
                             <div className="text-center">
                                 <button type="button" className="btn btn-info partial-validation submit"><span

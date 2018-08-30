@@ -9,18 +9,19 @@ import Base64 from "base-64";
 import Utf8 from "utf8";
 
 class App extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            user:{
-                is_authenticated:false,
-                is_superuser:false,
-                numberResourcesEvaluated:5,
+        this.state = {
+            user: {
+                is_authenticated: false,
+                is_superuser: false,
+                numberResourcesEvaluated: 5,
                 idUser: null,
                 userName: null,
                 userMail: null,
                 navbar: "index",
-            }
+            },
+            toEval: []
         }
     }
 
@@ -46,12 +47,19 @@ class App extends Component {
                         };
                     }
                 );
+                fetch("/API/learning_resources")
+                    .then((res)=>{
+                        return (res.json());
+                    })
+                    .then((res) => {
+                    this.setState({toEval: res});
+                });
             })
             .catch((err) => console.log(err));
     }
 
     onSubmitSignup(name, lastname, email, password) {
-        let value = name + ";;;" + lastname + ";;;"+ email + ";;;" + password;
+        let value = name + ";;;" + lastname + ";;;" + email + ";;;" + password;
         let bytes = Utf8.encode(value);
         let encoded = Base64.encode(bytes);
         fetch("/API/signup/" + encoded)
@@ -67,15 +75,22 @@ class App extends Component {
                                 userMail: user.email,
                                 is_authenticated: true,
                                 navbar: 'user',
-                            }
+                            },
                         };
                     }
                 );
+                fetch("/API/learning_resources")
+                    .then((res)=>{
+                        return (res.json());
+                    })
+                    .then((res) => {
+                        this.setState({toEval: res});
+                    });
             })
             .catch((err) => console.log(err));
     }
 
-    onLogout(){
+    onLogout() {
         this.setState((prevState) => {
                 return {
                     user: {
@@ -84,7 +99,8 @@ class App extends Component {
                         userMail: null,
                         is_authenticated: false,
                         navbar: 'index',
-                    }
+                    },
+                    toEval: []
                 };
             }
         );
@@ -95,9 +111,9 @@ class App extends Component {
 
             <div>
                 <Header user={this.state.user} onLogout={this.onLogout.bind(this)}/>
-                {this.state.user.is_authenticated?
-                <Evaluation/>
-                :
+                {this.state.user.is_authenticated ?
+                    <Evaluation/>
+                    :
                     <div className="row">
                         <div className="col-6">
                             <Login onSubmit={this.onSubmitLogin.bind(this)}/>

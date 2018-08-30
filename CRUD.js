@@ -13,9 +13,9 @@ exports.getConcepts = (connection, callback)=>{
     connection.end();
 };
 
-exports.getLearningResources = (connection, callback)=>{
+exports.getLearningResource = (connection, resourceId,callback)=>{
     connection.connect();
-    connection.query('SELECT * FROM learning_resources;', (err, rows, fields) => {
+    connection.query('SELECT * FROM learning_resources WHERE ID='+resourceId+';', (err, rows, fields) => {
         if (err) {
             console.log(err);
             throw new Error("Something went wrong with DB");
