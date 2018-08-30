@@ -34,8 +34,11 @@ export default class FormEval extends Component {
     render() {
 
         let listConcepts=[];
+        
         this.state.concepts.forEach((c)=>{
-           listConcepts.append(<option value={c}>{c}</option>);
+
+           listConcepts.push(<option key={c.id} value={c.uri}>{c.label}</option>);
+
         });
 
         return (
@@ -118,11 +121,11 @@ export default class FormEval extends Component {
                                 What topics did you identified on the video?
                             </div>
                             <div className="row">
-                                <label className="col-sm-3 col-form-label"><strong>What concepts did you identified</strong></label>
-                                <div className="col-sm-9">
+                                <div className="col-sm-12">
                                     <select multiple data-role="tagsinput">
                                         {listConcepts}
                                     </select>
+
                                 </div>
                             </div>
                             <div className="text-center">
