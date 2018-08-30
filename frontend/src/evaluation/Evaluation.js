@@ -16,17 +16,32 @@ export default class Evaluation extends Component {
                 title: "REACTing",
                 subtitleURL: "nuay",
                 url: "./resources/testVideo.mp4",
-                lesson: "rumbear"
+                lesson: "rumbear",
+                pauses: 0
             },
             play:false,
         }
         this.toggleVideo=this.toggleVideo.bind(this);
+        this.onPauseCallback = this.onPauseCallback.bind(this);
     }
 
     toggleVideo(){
-        this.setState((prevState)=>({play:! prevState.play})    );
+        this.setState((prevState)=>({
+            play:! prevState.play
+        }));
     }
 
+    onPauseCallback(){
+        this.setState((prevState)=>({
+            resource:{
+                title: prevState.resource.title,
+                subtitleURL: prevState.resource.subtitleURL,
+                url: prevState.resource.url,
+                lesson: prevState.resource.lesson,
+                pauses: prevState.resource.pauses +1
+            }
+        }));
+    }
 
     render() {
         let track = null;
@@ -54,7 +69,9 @@ export default class Evaluation extends Component {
                     <div className="row">
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-9 col-md-6">
-                            <ReactPlayer url={this.state.resource.url} playing={this.state.play} onClick={this.toggleVideo}/>
+                            <ReactPlayer url={this.state.resource.url} playing={this.state.play}
+                                         onClick={this.toggleVideo} onPause={this.onPauseCallback}
+                            controls={true}/>
                         </div>
                         <div className="col-sm-2 col-md-4"></div>
 
