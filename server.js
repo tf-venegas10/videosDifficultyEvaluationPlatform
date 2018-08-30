@@ -109,6 +109,19 @@ server.get("/API/concepts", (req, res) => {
     });
 });
 
+server.get("/API/learning_resources", (req, res) => {
+    let connection = mysql.createConnection({
+        insecureAuth: true,
+        host: process.env.LR_HOST,
+        user: process.env.LR_HOST,
+        password: process.env.LR_PW,
+        database: process.env.LR_DB
+    });
+    CRUD.getLearningResources(connection,(rows)=>{
+        res.send(rows);
+    });
+});
+
 server.listen(process.env.PORT || 3001, () => {
     console.log("Listening...");
 });
