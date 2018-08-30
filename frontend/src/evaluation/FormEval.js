@@ -30,14 +30,13 @@ export default class FormEval extends Component {
             })
             .catch((err) => console.log(err));
     }
-    optionClicked(optionsList) {
-        this.setState({ concepts: optionsList });
-    }
-    selectedBadgeClicked(optionsList) {
-        this.setState({ concepts: optionsList });
-    }
+    handleChange(selectedOption) {
+    this.setState((prevState)=>{selected: prevState.selected.push(selectedOption) });
 
-    render() {
+        }
+
+
+render() {
 
         let listConcepts=[];
 
@@ -53,14 +52,7 @@ export default class FormEval extends Component {
 
                 listConcepts.push({value:c.uri, label:c.label});
         });
-        const selectedOptionsStyles = {
-            color: "#3c763d",
-            backgroundColor: "#dff0d8"
-        };
-        const optionsListStyles = {
-            backgroundColor: "#dff0d8",
-            color: "#3c763d"
-        };
+
 
         return (
             <div id="accordion" className="mt-5 mb-5">
@@ -150,6 +142,7 @@ export default class FormEval extends Component {
                                 options={listConcepts}
                                 className="basic-multi-select"
                                 classNamePrefix="select"
+                                handleChange={this.handleChange.bind(this)}
                             />
                             <div className="text-center">
                                 <button type="button" className="btn btn-info partial-validation submit"><span
