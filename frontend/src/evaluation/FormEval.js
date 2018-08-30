@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import "./FormEval.css";
 import  MultiSelectReact  from 'multi-select-react';
+import Select from 'react-select';
 // App component - represents the whole app
 
 export default class FormEval extends Component {
@@ -156,6 +157,13 @@ export default class FormEval extends Component {
                                 selectedBadgeClicked={this.selectedBadgeClicked.bind(this)}
                                 selectedOptionsStyles={selectedOptionsStyles}
                                 optionsListStyles={optionsListStyles} />
+
+                            <Select
+                                value={this.state.selected}
+                                onChange={this.handleChange}
+                                options={this.state.concepts}
+                                isMulti={true}
+                            />
                             <div className="text-center">
                                 <button type="button" className="btn btn-info partial-validation submit"><span
                                     className="fa fa-check"></span> Submit
