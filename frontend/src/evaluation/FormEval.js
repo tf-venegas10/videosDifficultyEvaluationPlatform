@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import "./FormEval.css";
-
+import  MultiSelectReact  from 'multi-select-react';
 // App component - represents the whole app
 
 export default class FormEval extends Component {
@@ -30,6 +30,12 @@ export default class FormEval extends Component {
             })
             .catch((err) => console.log(err));
     }
+    optionClicked(optionsList) {
+        this.setState({ multiSelect: optionsList });
+    }
+    selectedBadgeClicked(optionsList) {
+        this.setState({ multiSelect: optionsList });
+    }
 
     render() {
 
@@ -40,6 +46,14 @@ export default class FormEval extends Component {
            listConcepts.push(<option key={c.id} value={c.uri}>{c.label}</option>);
 
         });
+        const selectedOptionsStyles = {
+            color: "#3c763d",
+            backgroundColor: "#dff0d8"
+        };
+        const optionsListStyles = {
+            backgroundColor: "#dff0d8",
+            color: "#3c763d"
+        };
 
         return (
             <div id="accordion" className="mt-5 mb-5">
@@ -128,6 +142,12 @@ export default class FormEval extends Component {
 
                                 </div>
                             </div>
+                            <MultiSelectReact
+                                options={listConcepts}
+                                optionClicked={this.optionClicked.bind(this)}
+                                selectedBadgeClicked={this.selectedBadgeClicked.bind(this)}
+                                selectedOptionsStyles={selectedOptionsStyles}
+                                optionsListStyles={optionsListStyles} />
                             <div className="text-center">
                                 <button type="button" className="btn btn-info partial-validation submit"><span
                                     className="fa fa-check"></span> Submit
