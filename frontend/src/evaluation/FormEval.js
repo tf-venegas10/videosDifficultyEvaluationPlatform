@@ -31,10 +31,10 @@ export default class FormEval extends Component {
             .catch((err) => console.log(err));
     }
     optionClicked(optionsList) {
-        this.setState({ multiSelect: optionsList });
+        this.setState({ concepts: optionsList });
     }
     selectedBadgeClicked(optionsList) {
-        this.setState({ multiSelect: optionsList });
+        this.setState({ concepts: optionsList });
     }
 
     render() {
@@ -151,7 +151,7 @@ export default class FormEval extends Component {
                                 </div>
                             </div>
                             <MultiSelectReact
-                                options={listConcepts}
+                                options={this.state.concepts}
                                 optionClicked={this.optionClicked.bind(this)}
                                 selectedBadgeClicked={this.selectedBadgeClicked.bind(this)}
                                 selectedOptionsStyles={selectedOptionsStyles}
