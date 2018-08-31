@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1db05b3c-69de-4ef1-b014-813cb3bf9a9e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/CRUD.js" beforeDir="false" afterPath="$PROJECT_DIR$/CRUD.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/evaluation/FormEval.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/evaluation/FormEval.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-    </list>
+    <list default="true" id="1db05b3c-69de-4ef1-b014-813cb3bf9a9e" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -311,12 +307,12 @@
       <workItem from="1535586895299" duration="11000" />
       <workItem from="1535591326206" duration="2714000" />
       <workItem from="1535670126287" duration="68000" />
-      <workItem from="1535670278813" duration="4784000" />
+      <workItem from="1535670278813" duration="5384000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27986000" />
+    <option name="totallyTimeSpent" value="28586000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="776" extended-state="6" />
