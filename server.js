@@ -8,8 +8,12 @@ const utf8 = require("utf8");
 const base64 = require("base-64");
 const mysql = require('mysql');
 const CRUD = require("./CRUD");
+const MongoClient = require("mongodb").MongoClient;
+
 
 const server = express();
+// Connection URL
+const DBurl = "HOLA";//process.env.MONGODB_URI;
 
 // uncomment after placing your favicon in /public
 //server.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -131,6 +135,21 @@ server.get("/API/learning_resources/:resourceId", (req, res) => {
             rows[0].path = rows[0].path.replace(emailRegex, ".mp4");
         }
         res.send(rows[0]);
+    });
+});
+
+//add an evaluation for an user
+server.post("/API/evaluation/:userId", function (req, res) {
+    // search db if user already has a document of challenge add value
+
+    console.log(req.body);
+    MongoClient.connect(DBurl, function (err, db) {
+        assert.equal(null, err);
+        console.log("Connected successfully to server");
+        CRUD.insertEvaluation(db, function (result) {
+            db.close();
+            res.send(result);
+        }, Number(req.params.userId), req.body);
     });
 });
 
