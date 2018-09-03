@@ -14,9 +14,11 @@ export default class Evaluation extends Component {
         this.state = {
             resource: {},
             play: false,
+            showEval: false,
         };
         this.toggleVideo = this.toggleVideo.bind(this);
         this.onPauseCallback = this.onPauseCallback.bind(this);
+        this.onEndedCallBack = this.onEndedCallBack.bind(this);
         this.onSend = this.onSend.bind(this);
     }
 
@@ -42,7 +44,6 @@ export default class Evaluation extends Component {
                                 return res.json();
                             })
                             .then((res) => {
-                                console.log(res);
                                 this.setState({
                                     resource: {
                                         videoId: Number(res.id),
@@ -60,8 +61,8 @@ export default class Evaluation extends Component {
                         throw BreakException;
                     }
                 });
-            }catch (e) {
-                if(e!== BreakException)throw e;
+            } catch (e) {
+                if (e !== BreakException) throw e;
             }
         }
     }
@@ -75,6 +76,7 @@ export default class Evaluation extends Component {
     onPauseCallback() {
         this.setState((prevState) => ({
             resource: {
+                videoId: prevState.resource.videoId,
                 title: prevState.resource.title,
                 subtitleURL: prevState.resource.subtitleURL,
                 url: prevState.resource.url,
@@ -82,6 +84,10 @@ export default class Evaluation extends Component {
                 pauses: prevState.resource.pauses + 1
             }
         }));
+    }
+
+    onEndedCallBack() {
+        this.setState({showEval: true})
     }
 
     onSend(evaluation) {
@@ -97,6 +103,9 @@ export default class Evaluation extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(ev),
+        }).then((res) => {
+            this.props.updateEvaluations(ev);
+            this.setState({resource: {}, showEval: false});
         }).catch(
             (err) => {
                 console.log(err);
@@ -132,6 +141,7 @@ export default class Evaluation extends Component {
                         <div className="col-sm-9 col-md-6">
                             <ReactPlayer url={this.state.resource.url} playing={this.state.play}
                                          onClick={this.toggleVideo} onPause={this.onPauseCallback}
+                                         onEnded={this.onEndedCallBack}
                                          controls={true} config={{
                                 file: {
                                     tracks: [
@@ -150,7 +160,7 @@ export default class Evaluation extends Component {
                     </div>
                     {videoFooter}
                 </blockquote>
-                <FormEval onSend={this.onSend} videoId={this.state.resource.videoId}/>
+                {this.state.showEval ? <FormEval onSend={this.onSend} videoId={this.state.resource.videoId}/> : null}
             </div>
 
         );

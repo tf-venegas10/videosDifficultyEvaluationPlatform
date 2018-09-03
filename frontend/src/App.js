@@ -38,7 +38,13 @@ class App extends Component {
                         let evaluations = [];
                         fetch("/API/evaluations/" + user.id)
                             .then((res) => {
-                                evaluations = res
+                                return res.json();
+                            })
+                            .then((res) => {
+                                console.log("ESTAS SON "+res);
+                                res.forEach((d)=>{
+                                    evaluations.push(d);
+                                });
                             })
                             .catch((err) => {
                                 console.log(err)
@@ -114,6 +120,13 @@ class App extends Component {
         );
     }
 
+    updateEvaluations(ev) {
+        this.setState((prevState)=>{
+            prevState.user.evaluations.push(ev);
+            return prevState;
+        });
+    }
+
     render() {
         return (
 
@@ -121,7 +134,8 @@ class App extends Component {
                 <Header user={this.state.user} onLogout={this.onLogout.bind(this)}/>
                 {this.state.user.is_authenticated ?
                     <Evaluation userId={this.state.user.idUser} toEval={this.state.toEval}
-                                evaluations={this.state.user.evaluations}/>
+                                evaluations={this.state.user.evaluations}
+                                updateEvaluations={this.updateEvaluations.bind(this)}/>
                     :
                     <div className="row">
                         <div className="col-6">

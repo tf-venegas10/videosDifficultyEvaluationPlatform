@@ -165,6 +165,7 @@ server.get("/API/evaluations/:userId", function (req, res) {
         CRUD.getEvaluations(db, function (result) {
             db.close();
             res.send(result);
+            console.log(result);
         }, Number(req.params.userId));
     });
 });

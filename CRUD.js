@@ -37,8 +37,6 @@ exports.getEvaluations = (db, callback, userId) => {
     try {
         collection.find({"userId": userId}).toArray(function (err, docs) {
             assert.equal(err, null);
-            console.log("Found the following records");
-            console.log(docs);
             let evaluations = [];
             try {
                 if (docs && docs.length > 0) {
@@ -64,7 +62,6 @@ exports.insertEvaluation = (db, callback, userId, evaluation) => {
         collection.find({"userId": userId}).toArray(function (err, docs) {
             assert.equal(err, null);
             console.log("Found the following records");
-            console.log(docs);
             let evaluations = [];
             try {
 
