@@ -9,11 +9,11 @@ const base64 = require("base-64");
 const mysql = require('mysql');
 const CRUD = require("./CRUD");
 const MongoClient = require("mongodb").MongoClient;
-
+const assert = require("assert");
 
 const server = express();
 // Connection URL
-const DBurl = "HOLA";//process.env.MONGODB_URI;
+const DBurl = "mongodb://127.0.0.1:27017/evaluations";//process.env.MONGODB_URI;
 
 // uncomment after placing your favicon in /public
 //server.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -22,8 +22,9 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 server.use(cookieParser());
 server.use(express.static(path.join(__dirname, 'frontend/build')));
+server.use('/videos', express.static(path.join(__dirname, 'Coursera')));
 
-let vids_to_check = {ids:[1, 2, 3]};
+let vids_to_check = {ids: [1, 2, 3]};
 
 server.get("/API/login/:userData", (req, res) => {
     let encoded = req.params.userData;
@@ -122,19 +123,19 @@ server.get("/API/learning_resources/:resourceId", (req, res) => {
     let resourceId = req.params.resourceId;
     let connection = mysql.createConnection({
         insecureAuth: true,
-        host: process.env.LR_HOST,
-        user: process.env.LR_HOST,
-        password: process.env.LR_PW,
-        database: process.env.LR_DB
+        host: "localhost",
+        user: "root",
+        password: process.env.DB_PW,
+        database: "dajee"
     });
     CRUD.getLearningResource(connection, resourceId, (rows) => {
-        if (rows[0]) {
+        if (rows) {
             let emailRegex = /^\.((t(x(t)?)?)|(e(n)?)|(s(r(t)?)?))(\.(t(x(t)?)?)?)?$/;
-            rows[0] = rows[0].replace("/Users/rubenmanrique/Dropbox/DoctoradoAndes/Investigacion/Course Sequences Dataset/CourseraTexto/",
-                "C:/Coursera/").replace("/Users/rubenmanrique/Downloads/CourseraTexto/", "C:/Coursera/");
-            rows[0].path = rows[0].path.replace(emailRegex, ".mp4");
+            rows.path = rows.path.replace("C:/Tesis ISIS/videosLu/Coursera/","172.24.99.23:3001/videos/");
+            let fs = require('fs');
+            rows.transcript = rows.path.replace(".mp4",".srt");
         }
-        res.send(rows[0]);
+        res.send(rows);
     });
 });
 

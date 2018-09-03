@@ -49,6 +49,7 @@ export default class FormEval extends Component {
                 difficulty: this.state.selectedDifficulty,
                 knowledge: this.state.selectedKnowledge,
             };
+            this.props.onSend(evaluation);
 
             this.setState({
                 selected: [],
@@ -56,6 +57,7 @@ export default class FormEval extends Component {
                 selectedKnowledge: "none",
                 missingSelection: false
             });
+
 
 
         }else{

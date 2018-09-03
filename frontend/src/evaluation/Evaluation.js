@@ -13,16 +13,18 @@ export default class Evaluation extends Component {
         super(props);
         this.state = {
             resource: {
+                videoId:69,
                 title: "REACTing",
-                subtitleURL: "nuay",
+                subtitleURL: "",
                 url: "./resources/testVideo.mp4",
-                lesson: "rumbear",
+                lesson: "how to ...",
                 pauses: 0
             },
             play:false,
-        }
+        };
         this.toggleVideo=this.toggleVideo.bind(this);
         this.onPauseCallback = this.onPauseCallback.bind(this);
+        this.onSend=this.onSend.bind(this);
     }
 
     toggleVideo(){
@@ -42,12 +44,32 @@ export default class Evaluation extends Component {
             }
         }));
     }
+    onSend(evaluation){
+        let ev=evaluation;
+        ev.videoId=this.state.resource.videoId;
+        ev.numberOfPauses=this.state.resource.pauses;
+        console.log(ev);
+
+        fetch('/API/evaluation/'+this.props.userId, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ev),
+        }).catch(
+            (err)=>{
+                console.log(err);
+            }
+        );
+
+        //TODO: fetch for new video fetch()
+    }
+
+
 
     render() {
-        let track = null;
-        if (this.state.resource.subtitleURL) {
-            track = <track label="English" kind="subtitles" srclang="en" src={this.state.subtitleURL} default/>;
-        }
+
 
         let videoFooter = null;
         if (this.state.resource.url) {
@@ -64,14 +86,18 @@ export default class Evaluation extends Component {
                 <blockquote className="blockquote text-center mt-5 mb-5">
                     {/*<video controls width="640" height="360" className="img-thumbnail">
                         <source src={this.state.resource.url} type="video/mp4"/>
-                            {track}
+                            <track label="English" kind="subtitles" srclang="en" src={this.state.subtitleURL} default/>
                     </video>*/}
                     <div className="row">
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-9 col-md-6">
                             <ReactPlayer url={this.state.resource.url} playing={this.state.play}
                                          onClick={this.toggleVideo} onPause={this.onPauseCallback}
-                            controls={true}/>
+                            controls={true} config={{ file: {
+                                    tracks: [
+                                        {kind: 'subtitles', src: this.state.resource.subtitleURL, srcLang: 'en', default: true},
+                                    ]
+                                }}}/>
                         </div>
                         <div className="col-sm-2 col-md-4"></div>
 
@@ -79,7 +105,7 @@ export default class Evaluation extends Component {
                     {videoFooter}
                 </blockquote>
 
-                <FormEval/>
+                <FormEval onSend={this.onSend}/>
 
             </div>
 

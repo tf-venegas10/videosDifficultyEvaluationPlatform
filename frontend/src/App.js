@@ -112,7 +112,7 @@ class App extends Component {
             <div>
                 <Header user={this.state.user} onLogout={this.onLogout.bind(this)}/>
                 {this.state.user.is_authenticated ?
-                    <Evaluation/>
+                    <Evaluation userId={this.state.user.idUser}/>
                     :
                     <div className="row">
                         <div className="col-6">

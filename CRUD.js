@@ -1,4 +1,4 @@
-//const assert = require("assert");
+const assert = require("assert");
 
 exports.getConcepts = (connection, callback)=>{
     connection.connect();
@@ -17,13 +17,13 @@ exports.getConcepts = (connection, callback)=>{
 
 exports.getLearningResource = (connection, resourceId,callback)=>{
     connection.connect();
-    connection.query('SELECT * FROM learning_resources WHERE ID='+resourceId+';', (err, rows, fields) => {
+    connection.query('SELECT * FROM learning_resources WHERE id='+resourceId+';', (err, rows, fields) => {
         if (err) {
             console.log(err);
             throw new Error("Something went wrong with DB");
         }
         if (rows) {
-            callback(rows);
+            callback(rows[0]);
             console.log("Concepts obtained");
         }
     });
@@ -31,7 +31,8 @@ exports.getLearningResource = (connection, resourceId,callback)=>{
 };
 
 exports.insertEvaluation = (db, callback, userId, evaluation) => {
-    const dbase = db.db("nutrition"); //here
+
+    const dbase = db.db("evaluations"); //here
     // Get the documents collection
     let collection = dbase.collection("evaluations");
     try {
@@ -39,7 +40,7 @@ exports.insertEvaluation = (db, callback, userId, evaluation) => {
             assert.equal(err, null);
             console.log("Found the following records");
             console.log(docs);
-            let challenges = [];
+            let evaluations = [];
             try {
 
                 if (docs && docs.length > 0) {
@@ -54,6 +55,8 @@ exports.insertEvaluation = (db, callback, userId, evaluation) => {
                         assert.equal(1, result.result.n);
                         console.log("Added evaluations");
                         callback(result);
+                    }, (err)=>{
+                    console.log(err);
                     });
             }
             catch (err) {
