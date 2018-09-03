@@ -23,6 +23,11 @@ server.use(bodyParser.urlencoded({extended: true}));
 server.use(cookieParser());
 server.use(express.static(path.join(__dirname, 'frontend/build')));
 server.use('/videos', express.static(path.join(__dirname, 'Coursera')));
+server.use((req,res,next)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 let vids_to_check = {ids: [1, 2, 3]};
 
@@ -143,12 +148,24 @@ server.get("/API/learning_resources/:resourceId", (req, res) => {
     });
     CRUD.getLearningResource(connection, resourceId, (rows) => {
         if (rows) {
-            let emailRegex = /^\.((t(x(t)?)?)|(e(n)?)|(s(r(t)?)?))(\.(t(x(t)?)?)?)?$/;
-            rows.path = rows.path.replace("C:/Tesis ISIS/videosLu/Coursera/","172.24.99.23:3001/videos/");
-            let fs = require('fs');
+            rows.path = rows.path.replace("C:/Tesis ISIS/videosLu/Coursera/","Coursera/");
             rows.transcript = rows.path.replace(".mp4",".srt");
         }
         res.send(rows);
+    });
+});
+
+//Get all evaluations from a specific user
+server.get("/API/evaluations/:userId", function (req, res) {
+    // search db if user already has a document of challenge add value
+
+    MongoClient.connect(DBurl, function (err, db) {
+        assert.equal(null, err);
+        console.log("Connected successfully to server");
+        CRUD.getEvaluations(db, function (result) {
+            db.close();
+            res.send(result);
+        }, Number(req.params.userId));
     });
 });
 

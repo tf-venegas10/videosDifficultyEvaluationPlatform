@@ -14,12 +14,11 @@ class App extends Component {
         this.state = {
             user: {
                 is_authenticated: false,
-                is_superuser: false,
                 numberResourcesEvaluated: 5,
                 idUser: null,
                 userName: null,
-                userMail: null,
                 navbar: "index",
+                evaluations: null
             },
             toEval: []
         }
@@ -36,24 +35,33 @@ class App extends Component {
             })
             .then(user => {
                 this.setState((prevState) => {
+                        let evaluations = [];
+                        fetch("/API/evaluations/" + user.id)
+                            .then((res) => {
+                                evaluations = res
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            });
                         return {
                             user: {
                                 idUser: user.id,
+                                numberResourcesEvaluated: evaluations.length,
                                 userName: user.name,
-                                userMail: user.email,
                                 is_authenticated: true,
+                                evaluations: evaluations,
                                 navbar: 'user',
                             }
                         };
                     }
                 );
                 fetch("/API/learning_resources")
-                    .then((res)=>{
+                    .then((res) => {
                         return (res.json());
                     })
                     .then((res) => {
-                    this.setState({toEval: res});
-                });
+                        this.setState({toEval: res.ids});
+                    });
             })
             .catch((err) => console.log(err));
     }
@@ -71,16 +79,17 @@ class App extends Component {
                         return {
                             user: {
                                 idUser: user.id,
+                                numberResourcesEvaluated: 0,
                                 userName: user.name,
-                                userMail: user.email,
                                 is_authenticated: true,
+                                evaluations: [],
                                 navbar: 'user',
                             },
                         };
                     }
                 );
                 fetch("/API/learning_resources")
-                    .then((res)=>{
+                    .then((res) => {
                         return (res.json());
                     })
                     .then((res) => {
@@ -96,7 +105,6 @@ class App extends Component {
                     user: {
                         idUser: null,
                         userName: null,
-                        userMail: null,
                         is_authenticated: false,
                         navbar: 'index',
                     },
@@ -112,7 +120,8 @@ class App extends Component {
             <div>
                 <Header user={this.state.user} onLogout={this.onLogout.bind(this)}/>
                 {this.state.user.is_authenticated ?
-                    <Evaluation userId={this.state.user.idUser}/>
+                    <Evaluation userId={this.state.user.idUser} toEval={this.state.toEval}
+                                evaluations={this.state.user.evaluations}/>
                     :
                     <div className="row">
                         <div className="col-6">

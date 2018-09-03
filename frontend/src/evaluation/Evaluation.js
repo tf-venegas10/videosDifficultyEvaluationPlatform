@@ -12,45 +12,85 @@ export default class Evaluation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            resource: {
-                videoId:69,
-                title: "REACTing",
-                subtitleURL: "",
-                url: "./resources/testVideo.mp4",
-                lesson: "how to ...",
-                pauses: 0
-            },
-            play:false,
+            resource: {},
+            play: false,
         };
-        this.toggleVideo=this.toggleVideo.bind(this);
+        this.toggleVideo = this.toggleVideo.bind(this);
         this.onPauseCallback = this.onPauseCallback.bind(this);
-        this.onSend=this.onSend.bind(this);
+        this.onSend = this.onSend.bind(this);
     }
 
-    toggleVideo(){
-        this.setState((prevState)=>({
-            play:! prevState.play
+    componentDidUpdate() {
+        let count = 0;
+        let i;
+        for (i in this.state.resource) {
+            count++;
+        }
+        let BreakException = {};
+        if (count === 0) {
+            try {
+                this.props.toEval.forEach((id) => {
+                    let use = true;
+                    console.log(id);
+                    this.props.evaluations.forEach((ev) => {
+                        if (id === ev.videoId) use = false;
+                    });
+                    if (use) {
+
+                        fetch("/API/learning_resources/" + id)
+                            .then((res) => {
+                                return res.json();
+                            })
+                            .then((res) => {
+                                console.log(res);
+                                this.setState({
+                                    resource: {
+                                        videoId: Number(res.id),
+                                        title: res.title,
+                                        subtitleURL: res.transcript,
+                                        url: res.path,
+                                        lesson: res.course_id,
+                                        pauses: 0
+                                    }
+                                });
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                        throw BreakException;
+                    }
+                });
+            }catch (e) {
+                if(e!== BreakException)throw e;
+            }
+        }
+    }
+
+    toggleVideo() {
+        this.setState((prevState) => ({
+            play: !prevState.play
         }));
     }
 
-    onPauseCallback(){
-        this.setState((prevState)=>({
-            resource:{
+    onPauseCallback() {
+        this.setState((prevState) => ({
+            resource: {
                 title: prevState.resource.title,
                 subtitleURL: prevState.resource.subtitleURL,
                 url: prevState.resource.url,
                 lesson: prevState.resource.lesson,
-                pauses: prevState.resource.pauses +1
+                pauses: prevState.resource.pauses + 1
             }
         }));
     }
-    onSend(evaluation){
-        let ev=evaluation;
-        ev.videoId=this.state.resource.videoId;
-        ev.numberOfPauses=this.state.resource.pauses;
+
+    onSend(evaluation) {
+        let ev = evaluation;
+        ev.videoId = this.state.resource.videoId;
+        ev.numberOfPauses = this.state.resource.pauses;
         console.log(ev);
 
-        fetch('/API/evaluation/'+this.props.userId, {
+        fetch('/API/evaluation/' + this.props.userId, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -58,14 +98,13 @@ export default class Evaluation extends Component {
             },
             body: JSON.stringify(ev),
         }).catch(
-            (err)=>{
+            (err) => {
                 console.log(err);
             }
         );
 
         //TODO: fetch for new video fetch()
     }
-
 
 
     render() {
@@ -93,18 +132,25 @@ export default class Evaluation extends Component {
                         <div className="col-sm-9 col-md-6">
                             <ReactPlayer url={this.state.resource.url} playing={this.state.play}
                                          onClick={this.toggleVideo} onPause={this.onPauseCallback}
-                            controls={true} config={{ file: {
+                                         controls={true} config={{
+                                file: {
                                     tracks: [
-                                        {kind: 'subtitles', src: this.state.resource.subtitleURL, srcLang: 'en', default: true},
+                                        {
+                                            kind: 'subtitles',
+                                            src: this.state.resource.subtitleURL,
+                                            srcLang: 'en',
+                                            default: true
+                                        },
                                     ]
-                                }}}/>
+                                }
+                            }}/>
                         </div>
                         <div className="col-sm-2 col-md-4"></div>
 
                     </div>
                     {videoFooter}
                 </blockquote>
-                <FormEval onSend={this.onSend} videoId={1}/>
+                <FormEval onSend={this.onSend} videoId={this.state.resource.videoId}/>
             </div>
 
         );

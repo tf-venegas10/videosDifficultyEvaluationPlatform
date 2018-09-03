@@ -1,6 +1,6 @@
 const assert = require("assert");
 
-exports.getConcepts = (connection, callback)=>{
+exports.getConcepts = (connection, callback) => {
     connection.connect();
     connection.query('SELECT * FROM concept;', (err, rows, fields) => {
         if (err) {
@@ -15,9 +15,9 @@ exports.getConcepts = (connection, callback)=>{
     connection.end();
 };
 
-exports.getLearningResource = (connection, resourceId,callback)=>{
+exports.getLearningResource = (connection, resourceId, callback) => {
     connection.connect();
-    connection.query('SELECT * FROM learning_resources WHERE id='+resourceId+';', (err, rows, fields) => {
+    connection.query('SELECT * FROM learning_resources WHERE id=' + resourceId + ';', (err, rows, fields) => {
         if (err) {
             console.log(err);
             throw new Error("Something went wrong with DB");
@@ -29,6 +29,31 @@ exports.getLearningResource = (connection, resourceId,callback)=>{
     });
     connection.end();
 };
+
+//Crud that gets ID from DB
+exports.getEvaluations = (db, callback, userId) => {
+    const dbase = db.db("evaluations"); //here
+    let collection = dbase.collection("evaluations");
+    try {
+        collection.find({"userId": userId}).toArray(function (err, docs) {
+            assert.equal(err, null);
+            console.log("Found the following records");
+            console.log(docs);
+            let evaluations = [];
+            try {
+                if (docs && docs.length > 0) {
+                    evaluations = docs[0].evaluations;
+                }
+                callback(evaluations)
+            }
+            catch (err) {
+                callback(err);
+            }
+        });
+    } catch (e) {
+        callback(err);
+    }
+}
 
 exports.insertEvaluation = (db, callback, userId, evaluation) => {
 
@@ -55,8 +80,8 @@ exports.insertEvaluation = (db, callback, userId, evaluation) => {
                         assert.equal(1, result.result.n);
                         console.log("Added evaluations");
                         callback(result);
-                    }, (err)=>{
-                    console.log(err);
+                    }, (err) => {
+                        console.log(err);
                     });
             }
             catch (err) {
@@ -89,9 +114,9 @@ exports.insertEvaluation = (db, callback, userId, evaluation) => {
     }
 };
 
-exports.getConceptsForVideo = (connection, videoId,callback)=>{
+exports.getConceptsForVideo = (connection, videoId, callback) => {
     connection.connect();
-    connection.query('SELECT * FROM concept_resource_association cr join concept c on cr.resource_id=c.id  WHERE resource_id='+str(videoId)+';', (err, rows, fields) => {
+    connection.query('SELECT * FROM concept_resource_association cr join concept c on cr.resource_id=c.id  WHERE resource_id=' + (videoId) + ';', (err, rows, fields) => {
         if (err) {
             console.log(err);
             throw new Error("Something went wrong with DB");

@@ -35,19 +35,21 @@ export default class FormEval extends Component {
                 this.setState({concepts: concepts});
             })
             .catch((err) => console.log(err));
-        fetch("/API/concepts/"+this.props.videoId)
-            .then(res => {
-                return (res.json());
-            })
-            .then(concepts => {
-                let selected=[];
-                concepts.forEach((c)=>{
-                    selected.push(c.uri);
-                });
-                this.setState({selected: selected});
-            })
-            .catch((err) => console.log(err));
-
+        if(this.props.video_id) {
+            fetch("/API/concepts/" + this.props.videoId)
+                .then(res => {
+                    console.log(res);
+                    return (res.json());
+                })
+                .then(concepts => {
+                    let selected = [];
+                    concepts.forEach((c) => {
+                        selected.push(c.uri);
+                    });
+                    this.setState({selected: selected});
+                })
+                .catch((err) => console.log(err));
+        }
     }
 
     handleChange(selectedOption) {
