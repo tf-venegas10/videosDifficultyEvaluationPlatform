@@ -15,7 +15,7 @@ export default class FormEval extends Component {
             missingSelection: false
         };
 
-        this.onSend=this.onSend.bind(this);
+        this.onSend = this.onSend.bind(this);
     }
 
     onSelect(name) {
@@ -35,6 +35,19 @@ export default class FormEval extends Component {
                 this.setState({concepts: concepts});
             })
             .catch((err) => console.log(err));
+        fetch("/API/concepts/"+this.props.videoId)
+            .then(res => {
+                return (res.json());
+            })
+            .then(concepts => {
+                let selected=[];
+                concepts.forEach((c)=>{
+                    selected.push(c.uri);
+                });
+                this.setState({selected: selected});
+            })
+            .catch((err) => console.log(err));
+
     }
 
     handleChange(selectedOption) {
@@ -42,8 +55,8 @@ export default class FormEval extends Component {
 
     }
 
-    onSend(){
-        if(this.state.selectedKnowledge!=="none" && this.state.selectedDifficulty!=="none") {
+    onSend() {
+        if (this.state.selectedKnowledge !== "none" && this.state.selectedDifficulty !== "none") {
             let evaluation = {
                 topics: this.state.selected,
                 difficulty: this.state.selectedDifficulty,
@@ -58,8 +71,8 @@ export default class FormEval extends Component {
             });
 
 
-        }else{
-            this.setState({missingSelection:true});
+        } else {
+            this.setState({missingSelection: true});
         }
     }
 
@@ -81,9 +94,9 @@ export default class FormEval extends Component {
                 listConcepts.push({value: c.uri, label: c.label});
             });
 
-        let warnning=null;
-        if(this.state.missingSelection){
-            warnning= (<div className="alert alert-danger" role="alert">
+        let warnning = null;
+        if (this.state.missingSelection) {
+            warnning = (<div className="alert alert-danger" role="alert">
                 <strong>Oh snap!</strong> You need to fully evaluate the resource.
             </div>)
         }
@@ -180,7 +193,8 @@ export default class FormEval extends Component {
                             />
                             {warnning}
                             <div className="text-center">
-                                <button type="button" className="btn btn-info partial-validation submit" onClick={this.onSend}><span
+                                <button type="button" className="btn btn-info partial-validation submit"
+                                        onClick={this.onSend}><span
                                     className="fa fa-check"></span> Submit
                                 </button>
                             </div>

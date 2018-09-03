@@ -79,7 +79,7 @@ export default class Evaluation extends Component {
                     {videoFooter}
                 </blockquote>
 
-                <FormEval/>
+                <FormEval videoId={1}/>
 
             </div>
 
