@@ -115,6 +115,19 @@ server.get("/API/concepts", (req, res) => {
     });
 });
 
+server.get("/API/concepts/:videoId", (req, res) => {
+    let connection = mysql.createConnection({
+        insecureAuth: true,
+        host: "localhost",
+        user: "root",
+        password: process.env.DB_PW,
+        database: "dajee"
+    });
+CRUD.getConceptsForVideo(connection, req.params.videoId,(rows) => {
+    res.send(rows);
+});
+});
+
 server.get("/API/learning_resources", (req, res) => {
     res.send(vids_to_check)
 });

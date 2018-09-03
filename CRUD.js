@@ -88,3 +88,18 @@ exports.insertEvaluation = (db, callback, userId, evaluation) => {
 
     }
 };
+
+exports.getConceptsForVideo = (connection, videoId,callback)=>{
+    connection.connect();
+    connection.query('SELECT * FROM concept_resource_association cr join concept c on cr.resource_id=c.id  WHERE resource_id='+str(videoId)+';', (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            throw new Error("Something went wrong with DB");
+        }
+        if (rows) {
+            callback(rows);
+            console.log("Concepts obtained");
+        }
+    });
+    connection.end();
+};

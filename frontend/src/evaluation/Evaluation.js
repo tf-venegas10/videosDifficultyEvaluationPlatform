@@ -104,9 +104,7 @@ export default class Evaluation extends Component {
                     </div>
                     {videoFooter}
                 </blockquote>
-
-                <FormEval onSend={this.onSend}/>
-
+                <FormEval onSend={this.onSend} videoId={1}/>
             </div>
 
         );
