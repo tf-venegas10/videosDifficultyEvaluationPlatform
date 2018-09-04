@@ -28,7 +28,9 @@ export default class Signup extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        this.state.onSubmit(this.state.name, this.state.lastName, this.state.emailS, this.state.passwordS);
+        if(this.state.emailS.endsWith("@uniandes.edu.co")) {
+            this.state.onSubmit(this.state.name, this.state.lastName, this.state.emailS, this.state.passwordS);
+        }
     };
 
     render() {

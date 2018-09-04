@@ -26,7 +26,9 @@ export default class Login extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        this.state.onSubmit(this.state.email, this.state.password);
+        if(this.state.email.endsWith("@uniandes.edu.co")){
+            this.state.onSubmit(this.state.email, this.state.password);
+        }
     }
 
     render() {
@@ -37,7 +39,7 @@ export default class Login extends Component {
                         <div className="row justify-content-around">
                             <h3>Login</h3>
                         </div>
-                        <FormGroup controlId="email" bsSize="large">
+                        <FormGroup controlId="email" bsSize="large" validationState="error">
                             <ControlLabel className="auth-text">Email</ControlLabel>
                             <FormControl
                                 autoFocus
@@ -46,7 +48,7 @@ export default class Login extends Component {
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
-                        <FormGroup controlId="password" bsSize="large">
+                        <FormGroup controlId="password" bsSize="large" validationState='error'>
                             <ControlLabel className="auth-text">Password</ControlLabel>
                             <FormControl
                                 value={this.state.password}

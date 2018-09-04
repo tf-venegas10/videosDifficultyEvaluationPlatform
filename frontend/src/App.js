@@ -28,7 +28,6 @@ class App extends Component {
         let value = email + ";;;" + password;
         let bytes = Utf8.encode(value);
         let encoded = Base64.encode(bytes);
-        console.log("login attempt");
         fetch("/API/login/" + encoded)
             .then(res => {
                 return (res.json());
@@ -41,7 +40,6 @@ class App extends Component {
                                 return res.json();
                             })
                             .then((res) => {
-                                console.log("ESTAS SON "+res);
                                 res.forEach((d)=>{
                                     evaluations.push(d);
                                 });

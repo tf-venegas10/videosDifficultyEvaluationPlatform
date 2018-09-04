@@ -19,6 +19,7 @@ export default class Evaluation extends Component {
         this.toggleVideo = this.toggleVideo.bind(this);
         this.onPauseCallback = this.onPauseCallback.bind(this);
         this.onEndedCallBack = this.onEndedCallBack.bind(this);
+        this.onSeekCallback = this.onSeekCallback.bind(this);
         this.onSend = this.onSend.bind(this);
     }
 
@@ -28,13 +29,16 @@ export default class Evaluation extends Component {
             count++;
         }
         let BreakException = {};
-        if (count === 0) {
+        if (count === 0 && this.props.evaluations) {
             try {
                 this.props.toEval.forEach((id) => {
                     let use = true;
                     console.log(id);
                     this.props.evaluations.forEach((ev) => {
-                        if (id === ev.videoId) use = false;
+                        if (id === ev.videoId) {
+                            use = false;
+                            console.log("EXISTS: "+id);
+                        }
                     });
                     if (use) {
 
@@ -50,7 +54,8 @@ export default class Evaluation extends Component {
                                         subtitleURL: res.transcript,
                                         url: res.path,
                                         lesson: res.path.split("/")[1],
-                                        pauses: 0
+                                        pauses: 0,
+                                        seeks: 0
                                     }
                                 });
                             })
@@ -80,13 +85,28 @@ export default class Evaluation extends Component {
                 subtitleURL: prevState.resource.subtitleURL,
                 url: prevState.resource.url,
                 lesson: prevState.resource.lesson,
-                pauses: prevState.resource.pauses + 1
+                pauses: prevState.resource.pauses + 1,
+                seeks: prevState.resource.seeks
             }
         }));
     }
 
     onEndedCallBack() {
         this.setState({showEval: true})
+    }
+
+    onSeekCallback(seconds){
+        this.setState((prevState) => ({
+            resource: {
+                videoId: prevState.resource.videoId,
+                title: prevState.resource.title,
+                subtitleURL: prevState.resource.subtitleURL,
+                url: prevState.resource.url,
+                lesson: prevState.resource.lesson,
+                pauses: prevState.resource.pauses,
+                seeks: prevState.resource.seeks+ 1
+            }
+        }));
     }
 
     onSend(evaluation) {
@@ -138,9 +158,9 @@ export default class Evaluation extends Component {
                     <div className="row">
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-9 col-md-6">
-                            <ReactPlayer url={this.state.resource.url} playing={this.state.play}
+                            <ReactPlayer url={decodeURI(this.state.resource.url)} playing={this.state.play}
                                          onClick={this.toggleVideo} onPause={this.onPauseCallback}
-                                         onEnded={this.onEndedCallBack}
+                                         onEnded={this.onEndedCallBack} onSeek={this.onSeekCallback}
                                          controls={true} config={{
                                 file: {
                                     tracks: [

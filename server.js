@@ -22,12 +22,6 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 server.use(cookieParser());
 server.use(express.static(path.join(__dirname, 'frontend/build')));
-server.use('/videos', express.static(path.join(__dirname, 'Coursera')));
-server.use((req,res,next)=>{
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
 
 let vids_to_check = {ids: [421,1217,428, 2, 3]};
 
