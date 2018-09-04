@@ -113,7 +113,8 @@ exports.insertEvaluation = (db, callback, userId, evaluation) => {
 
 exports.getConceptsForVideo = (connection, videoId, callback) => {
     connection.connect();
-    connection.query('SELECT * FROM concept_resource_association cr join concept c on cr.resource_id=c.id  WHERE resource_id=' + (videoId) + ';', (err, rows, fields) => {
+        let quer='SELECT * FROM concept_resource_association cr join concept c on cr.concept_id=c.id  WHERE cr.resource_id=' + (videoId) + ';';
+    connection.query(quer, (err, rows, fields) => {
         if (err) {
             console.log(err);
             throw new Error("Something went wrong with DB");

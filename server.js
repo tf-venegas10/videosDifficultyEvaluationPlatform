@@ -29,7 +29,7 @@ server.use((req,res,next)=>{
     next();
 });
 
-let vids_to_check = {ids: [1, 2, 3]};
+let vids_to_check = {ids: [421,1217,428, 2, 3]};
 
 server.get("/API/login/:userData", (req, res) => {
     let encoded = req.params.userData;
@@ -149,7 +149,7 @@ server.get("/API/learning_resources/:resourceId", (req, res) => {
     CRUD.getLearningResource(connection, resourceId, (rows) => {
         if (rows) {
             rows.path = rows.path.replace("C:/Tesis ISIS/videosLu/Coursera/","Coursera/");
-            rows.transcript = rows.path.replace(".mp4",".srt");
+            rows.transcript = rows.path.replace(".mp4",".en.srt");
         }
         res.send(rows);
     });

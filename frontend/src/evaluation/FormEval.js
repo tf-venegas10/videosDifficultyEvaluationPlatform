@@ -35,7 +35,7 @@ export default class FormEval extends Component {
                 this.setState({concepts: concepts});
             })
             .catch((err) => console.log(err));
-        if(this.props.video_id) {
+        if(this.props.videoId) {
             fetch("/API/concepts/" + this.props.videoId)
                 .then(res => {
                     console.log(res);
@@ -44,7 +44,8 @@ export default class FormEval extends Component {
                 .then(concepts => {
                     let selected = [];
                     concepts.forEach((c) => {
-                        selected.push(c.uri);
+                        console.log(c);
+                        selected.push({value: c.uri, label: c.label });
                     });
                     this.setState({selected: selected});
                 })

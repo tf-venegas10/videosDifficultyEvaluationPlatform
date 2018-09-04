@@ -24,8 +24,7 @@ export default class Evaluation extends Component {
 
     componentDidUpdate() {
         let count = 0;
-        let i;
-        for (i in this.state.resource) {
+        for ( let i in this.state.resource) {
             count++;
         }
         let BreakException = {};
@@ -50,7 +49,7 @@ export default class Evaluation extends Component {
                                         title: res.title,
                                         subtitleURL: res.transcript,
                                         url: res.path,
-                                        lesson: res.course_id,
+                                        lesson: res.path.split("/")[1],
                                         pauses: 0
                                     }
                                 });
@@ -122,7 +121,7 @@ export default class Evaluation extends Component {
         let videoFooter = null;
         if (this.state.resource.url) {
             videoFooter = <footer className="blockquote-footer">
-                From the course: <a href={this.state.resource.url} target="_blank"><cite
+                From the course: <a href="" target="_blank"><cite
                 title={this.state.resource.lesson}>{this.state.resource.lesson}</cite></a>
             </footer>
         }
