@@ -7,6 +7,7 @@ import Login from "./auth/Login";
 import Signup from "./auth/Signup";
 import Base64 from "base-64";
 import Utf8 from "utf8";
+import Instructions from "./instructions/Instructions";
 
 class App extends Component {
     constructor(props) {
@@ -20,7 +21,8 @@ class App extends Component {
                 navbar: "index",
                 evaluations: null
             },
-            toEval: []
+            toEval: [],
+            showIntro: true,
         }
     }
 
@@ -125,15 +127,21 @@ class App extends Component {
         });
     }
 
+    quitIntro(){
+        this.setState({showIntro:false});
+    }
+
     render() {
         return (
 
             <div>
                 <Header user={this.state.user} onLogout={this.onLogout.bind(this)}/>
                 {this.state.user.is_authenticated ?
-                    <Evaluation userId={this.state.user.idUser} toEval={this.state.toEval}
+                    (this.state.showIntro?
+                        <Instructions goToIndex={this.quitIntro.bind(this)}/>
+                        :<Evaluation userId={this.state.user.idUser} toEval={this.state.toEval}
                                 evaluations={this.state.user.evaluations}
-                                updateEvaluations={this.updateEvaluations.bind(this)}/>
+                                updateEvaluations={this.updateEvaluations.bind(this)}/>)
                     :
                     <div className="row">
                         <div className="col-6">

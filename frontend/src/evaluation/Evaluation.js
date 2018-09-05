@@ -25,7 +25,7 @@ export default class Evaluation extends Component {
 
     componentDidUpdate() {
         let count = 0;
-        for ( let i in this.state.resource) {
+        for (let i in this.state.resource) {
             count++;
         }
         let BreakException = {};
@@ -37,7 +37,7 @@ export default class Evaluation extends Component {
                     this.props.evaluations.forEach((ev) => {
                         if (id === ev.videoId) {
                             use = false;
-                            console.log("EXISTS: "+id);
+                            console.log("EXISTS: " + id);
                         }
                     });
                     if (use) {
@@ -95,7 +95,7 @@ export default class Evaluation extends Component {
         this.setState({showEval: true})
     }
 
-    onSeekCallback(seconds){
+    onSeekCallback(seconds) {
         this.setState((prevState) => ({
             resource: {
                 videoId: prevState.resource.videoId,
@@ -104,7 +104,7 @@ export default class Evaluation extends Component {
                 url: prevState.resource.url,
                 lesson: prevState.resource.lesson,
                 pauses: prevState.resource.pauses,
-                seeks: prevState.resource.seeks+ 1
+                seeks: prevState.resource.seeks + 1
             }
         }));
     }
@@ -134,10 +134,24 @@ export default class Evaluation extends Component {
         //TODO: fetch for new video fetch()
     }
 
+    readTextFile(file) {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", file, false);
+        rawFile.onreadystatechange = function () {
+            if (rawFile.readyState === 4) {
+                if (rawFile.status === 200 || rawFile.status == 0) {
+                    var allText = rawFile.responseText;
+                    alert(allText);
+                }
+            }
+        }
+        rawFile.send(null);
+    }
+
 
     render() {
 
-
+        let subtititles = this.readTextFile(this.state.resource.subtitleURL);
         let videoFooter = null;
         if (this.state.resource.url) {
             videoFooter = <footer className="blockquote-footer">
@@ -158,16 +172,17 @@ export default class Evaluation extends Component {
                     <div className="row">
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-9 col-md-6">
-                            <ReactPlayer url={decodeURI(this.state.resource.url)} playing={this.state.play}
-                                         onClick={this.toggleVideo} onPause={this.onPauseCallback}
-                                         onEnded={this.onEndedCallBack} onSeek={this.onSeekCallback}
-                                         controls={true} config={{
+                            <ReactPlayer
+                                url={this.state.resource.url ? decodeURI(this.state.resource.url) : "resources/testVideo.mp4"}
+                                playing={this.state.play} onClick={this.toggleVideo} onPause={this.onPauseCallback}
+                                onEnded={this.onEndedCallBack} onSeek={this.onSeekCallback}
+                                controls={true} config={{
                                 file: {
                                     tracks: [
                                         {
                                             kind: 'subtitles',
                                             src: this.state.resource.subtitleURL,
-                                            srcLang: 'en',
+                                            srcLang: 'es',
                                             default: true
                                         },
                                     ]

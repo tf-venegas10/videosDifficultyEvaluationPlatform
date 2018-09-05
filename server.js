@@ -23,7 +23,7 @@ server.use(bodyParser.urlencoded({extended: true}));
 server.use(cookieParser());
 server.use(express.static(path.join(__dirname, 'frontend/build')));
 
-let vids_to_check = {ids: [421,1217,428, 2, 3]};
+let vids_to_check = {ids: [421, 1217, 428, 2, 3, 3844, 3886]};
 
 server.get("/API/login/:userData", (req, res) => {
     let encoded = req.params.userData;
@@ -114,6 +114,7 @@ server.get("/API/concepts", (req, res) => {
     });
 });
 
+//Get the concepts for a given video specified by id
 server.get("/API/concepts/:videoId", (req, res) => {
     let connection = mysql.createConnection({
         insecureAuth: true,
@@ -122,15 +123,35 @@ server.get("/API/concepts/:videoId", (req, res) => {
         password: process.env.DB_PW,
         database: "dajee"
     });
-CRUD.getConceptsForVideo(connection, req.params.videoId,(rows) => {
-    res.send(rows);
-});
+    CRUD.getConceptsForVideo(connection, req.params.videoId, (rows) => {
+        res.send(rows);
+    });
 });
 
+/**
+ * Shuffles array in place.
+ * @param {Array} a items An array containing the items.
+ */
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
+/**
+ * Gets all learning resources to be evaluated by the user
+ */
 server.get("/API/learning_resources", (req, res) => {
-    res.send(vids_to_check)
+    vids_to_check.ids = shuffle(vids_to_check.ids);
+    res.send(vids_to_check);
 });
 
+//Get a given learning resource by its id
 server.get("/API/learning_resources/:resourceId", (req, res) => {
     let resourceId = req.params.resourceId;
     let connection = mysql.createConnection({
@@ -142,8 +163,8 @@ server.get("/API/learning_resources/:resourceId", (req, res) => {
     });
     CRUD.getLearningResource(connection, resourceId, (rows) => {
         if (rows) {
-            rows.path = rows.path.replace("C:/Tesis ISIS/videosLu/Coursera/","Coursera/");
-            rows.transcript = rows.path.replace(".mp4",".en.srt");
+            rows.path = rows.path.replace("C:/Tesis ISIS/videosLu/Coursera/", "Coursera/");
+            rows.transcript = rows.path.replace(".mp4", ".es.srt");
         }
         res.send(rows);
     });

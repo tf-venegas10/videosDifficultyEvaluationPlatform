@@ -1,0 +1,22 @@
+/*-----------------
+Instructions styles
+ ------------------*/
+
+.instructions-content{
+    height: 100vh;
+}
+
+.center-items{
+    text-align: center;
+    align-content: center;
+}
+
+.instructions-title{
+    padding-top: 10%;
+    padding-bottom: 5%;
+    color: #428bca;
+}
+
+.proceed-btn{
+    padding-top: 5%;
+}

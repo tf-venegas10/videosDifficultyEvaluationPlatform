@@ -35,7 +35,7 @@ export default class Login extends Component {
         return (
             <div className="container-fluid form-base">
                 <div className="row justify-content-around banner-content">
-                    <form onSubmit={this.handleSubmit} className="col-6 center-items">
+                    <form onSubmit={this.handleSubmit} className="col-6">
                         <div className="row justify-content-around">
                             <h3>Login</h3>
                         </div>
