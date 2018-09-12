@@ -15,16 +15,20 @@ export default class Evaluation extends Component {
             resource: {},
             play: false,
             showEval: false,
+            time: 0
         };
         this.toggleVideo = this.toggleVideo.bind(this);
+        this.onStartCallback = this.onStartCallback.bind(this);
         this.onPauseCallback = this.onPauseCallback.bind(this);
         this.onEndedCallBack = this.onEndedCallBack.bind(this);
         this.onSeekCallback = this.onSeekCallback.bind(this);
+        this.onProgressCallback = this.onProgressCallback.bind(this);
         this.onSend = this.onSend.bind(this);
     }
 
     componentDidUpdate() {
         let count = 0;
+
         for (let i in this.state.resource) {
             count++;
         }
@@ -33,7 +37,6 @@ export default class Evaluation extends Component {
             try {
                 this.props.toEval.forEach((id) => {
                     let use = true;
-                    console.log(id);
                     this.props.evaluations.forEach((ev) => {
                         if (id === ev.videoId) {
                             use = false;
@@ -55,7 +58,13 @@ export default class Evaluation extends Component {
                                         url: res.path,
                                         lesson: res.path.split("/")[1],
                                         pauses: 0,
-                                        seeks: 0
+                                        backSeeks: 0,
+                                        forwardSeeks: 0,
+                                        seeksInterval: [],
+                                        played: 0,
+                                        playedSeconds: 0,
+                                        startTime: null,
+                                        finishTime: null
                                     }
                                 });
                             })
@@ -77,42 +86,68 @@ export default class Evaluation extends Component {
         }));
     }
 
-    onPauseCallback() {
-        this.setState((prevState) => ({
-            resource: {
-                videoId: prevState.resource.videoId,
-                title: prevState.resource.title,
-                subtitleURL: prevState.resource.subtitleURL,
-                url: prevState.resource.url,
-                lesson: prevState.resource.lesson,
-                pauses: prevState.resource.pauses + 1,
-                seeks: prevState.resource.seeks
+    onStartCallback(){
+        this.setState((prevState) =>{
+            if(!prevState.resource.startTime){
+                prevState.resource.startTime = Date.now();
+                return prevState;
             }
-        }));
+        });
+    }
+
+    onPauseCallback() {
+        this.setState((prevState) => {
+            prevState.resource.pauses = prevState.resource.pauses+1;
+            return prevState;
+        });
     }
 
     onEndedCallBack() {
-        this.setState({showEval: true})
+        this.setState((prevState)=>{
+            prevState.showEval = true;
+            if(!prevState.resource.endTime){
+                prevState.resource.endTime = Date.now();
+            }
+            return prevState;
+        });
     }
 
     onSeekCallback(seconds) {
-        this.setState((prevState) => ({
-            resource: {
-                videoId: prevState.resource.videoId,
-                title: prevState.resource.title,
-                subtitleURL: prevState.resource.subtitleURL,
-                url: prevState.resource.url,
-                lesson: prevState.resource.lesson,
-                pauses: prevState.resource.pauses,
-                seeks: prevState.resource.seeks + 1
+        this.setState((prevState) => {
+            let pastTime = prevState.resource.playedSeconds;
+            let tuple = {
+                startTime: pastTime,
+                endTime: seconds
             }
-        }));
+            pastTime -= seconds;
+            prevState.resource.seeksInterval.push(tuple);
+            if(pastTime>0) {
+                prevState.resource.backSeeks = prevState.resource.backSeeks + 1;
+            }else if (pastTime<0){
+                prevState.resource.forwardSeeks = prevState.resource.forwardSeeks +1;
+            }
+            return prevState;
+        });
+    }
+
+    onProgressCallback(info) {
+        this.setState((prevState)=>{
+            prevState.resource.played = info.played;
+            prevState.resource.playedSeconds = info.playedSeconds;
+            return prevState;
+        });
     }
 
     onSend(evaluation) {
         let ev = evaluation;
         ev.videoId = this.state.resource.videoId;
         ev.numberOfPauses = this.state.resource.pauses;
+        ev.numberOfBackSeeks = this.state.resource.backSeeks;
+        ev.numberOfForwardSeeks = this.state.resource.forwardSeeks;
+        ev.seeksIntervals = this.state.resource.seeksInterval;
+        ev.startTime = this.state.resource.startTime;
+        ev.endTime = this.state.resource.endTime;
+        ev.user = this.props.userName;
         console.log(ev);
 
         fetch('/API/evaluation/' + this.props.userId, {
@@ -134,24 +169,8 @@ export default class Evaluation extends Component {
         //TODO: fetch for new video fetch()
     }
 
-    readTextFile(file) {
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", file, false);
-        rawFile.onreadystatechange = function () {
-            if (rawFile.readyState === 4) {
-                if (rawFile.status === 200 || rawFile.status == 0) {
-                    var allText = rawFile.responseText;
-                    alert(allText);
-                }
-            }
-        }
-        rawFile.send(null);
-    }
-
-
     render() {
 
-        let subtititles = this.readTextFile(this.state.resource.subtitleURL);
         let videoFooter = null;
         if (this.state.resource.url) {
             videoFooter = <footer className="blockquote-footer">
@@ -173,16 +192,17 @@ export default class Evaluation extends Component {
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-9 col-md-6">
                             <ReactPlayer
-                                url={this.state.resource.url ? decodeURI(this.state.resource.url) : "resources/testVideo.mp4"}
+                                url={decodeURI(this.state.resource.url)}
                                 playing={this.state.play} onClick={this.toggleVideo} onPause={this.onPauseCallback}
                                 onEnded={this.onEndedCallBack} onSeek={this.onSeekCallback}
+                                onProgress={this.onProgressCallback} onStart={this.onStartCallback}
                                 controls={true} config={{
                                 file: {
                                     tracks: [
                                         {
                                             kind: 'subtitles',
                                             src: this.state.resource.subtitleURL,
-                                            srcLang: 'es',
+                                            srcLang: 'en',
                                             default: true
                                         },
                                     ]

@@ -189,6 +189,7 @@ export default class FormEval extends Component {
                                 value={this.state.selected}
                                 isMulti
                                 name="topics"
+                                allowCreate={true}
                                 options={listConcepts}
                                 className="basic-multi-select"
                                 classNamePrefix="select"

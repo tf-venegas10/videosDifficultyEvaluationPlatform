@@ -18,7 +18,7 @@ export default class Header extends Component {
                 <nav
                     className="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar bg-dark box-shadow sticky-top">
                     <div className="container">
-                        <a href="{% url 'home' %}" className="navbar-brand mr-0 mr-md-5"><strong>ALMA-DAJEE
+                        <a href="" className="navbar-brand mr-0 mr-md-5"><strong>ALMA-DAJEE
                             Evaluation</strong></a>
 
                         {this.props.user.is_authenticated ?
@@ -27,11 +27,12 @@ export default class Header extends Component {
                                     <li className="nav-item mr-3">
                                         <a className="nav-link" title="">Hi, {this.props.user.userName}!</a>
                                     </li>
-                                    {(this.props.user.numberResourcesEvaluated > 0) ?
+                                    {(this.props.user.evaluations.length > 0) ?
                                         <li className="nav-item mr-3">
                                             <a className="nav-link" data-toggle="tooltip"
-                                               title={"You have already evaluated " + this.props.user.numberResourcesEvaluated + " resources!"}><span
-                                                className="fa fa-trophy"></span> {this.props.user.numberResourcesEvaluated}</a>
+                                               title={"You have already evaluated " + this.props.user.evaluations.length + " resources!"}><span
+                                                className="fa fa-trophy"></span> {this.props.user.evaluations.length}
+                                            </a>
                                         </li>
                                         : <div></div>}
                                 </ul>

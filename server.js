@@ -23,8 +23,6 @@ server.use(bodyParser.urlencoded({extended: true}));
 server.use(cookieParser());
 server.use(express.static(path.join(__dirname, 'frontend/build')));
 
-let vids_to_check = {ids: [421, 1217, 428, 2, 3, 3844, 3886]};
-
 server.get("/API/login/:userData", (req, res) => {
     let encoded = req.params.userData;
     let decoded = base64.decode(encoded);
@@ -48,6 +46,8 @@ server.get("/API/login/:userData", (req, res) => {
             user = {
                 id: rows[0].ID,
                 name: rows[0].NAME,
+                lastname:rows[0].LASTNAME,
+                educationLevel: rows[0].EDUCATIONLEVEL,
                 email: params[0]
             };
             console.log("login success");
@@ -71,14 +71,14 @@ server.get("/API/signup/:userData", (req, res) => {
     });
     connection.connect();
     try {
-        connection.query('INSERT INTO USERS (NAME, LASTNAME, EMAIL, PASSWORD) ' +
-            'VALUES (\'' + params[0] + '\',\'' + params[1] + '\',\'' + params[2] + '\',\'' + params[3] + '\');', (err, rows, fields) => {
+        connection.query('INSERT INTO USERS (NAME, LASTNAME, EMAIL, PASSWORD, EDUCATIONLEVEL) ' +
+            'VALUES (\'' + params[0] + '\',\'' + params[1] + '\',\'' + params[2] + '\',\'' + params[3] + '\',\'' + params[4] + '\');', (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 throw err;
             }
         });
-        connection.query('SELECT ID, NAME FROM USERS WHERE EMAIL=\'' + params[2] + '\';', (err, rows, fields) => {
+        connection.query('SELECT * FROM USERS WHERE EMAIL=\'' + params[2] + '\';', (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 return;
@@ -87,6 +87,8 @@ server.get("/API/signup/:userData", (req, res) => {
             let user = {
                 id: rows[0].ID,
                 name: rows[0].NAME,
+                lastname:rows[0].LASTNAME,
+                educationLevel: rows[0].EDUCATIONLEVEL,
                 email: params[1]
             };
 
@@ -129,29 +131,29 @@ server.get("/API/concepts/:videoId", (req, res) => {
 });
 
 /**
- * Shuffles array in place.
- * @param {Array} a items An array containing the items.
- */
-function shuffle(a) {
-    var j, x, i;
-    for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
-    }
-    return a;
-}
-
-/**
  * Gets all learning resources to be evaluated by the user
  */
-server.get("/API/learning_resources", (req, res) => {
-    vids_to_check.ids = shuffle(vids_to_check.ids);
-    res.send(vids_to_check);
+server.get("/API/learning_resources/level/:level", (req, res) => {
+    let connection = mysql.createConnection({
+        insecureAuth: true,
+        host: "localhost",
+        user: "root",
+        password: process.env.DB_PW,
+        database: "dajee"
+    });
+    CRUD.getLearningResources(connection, req.params.level, (rows) => {
+        if(rows) {
+            res.send(rows.ids);
+        }
+        else{
+            res.send([]);
+        }
+    });
 });
 
-//Get a given learning resource by its id
+/**
+ * Get a given learning resource by its id
+ */
 server.get("/API/learning_resources/:resourceId", (req, res) => {
     let resourceId = req.params.resourceId;
     let connection = mysql.createConnection({
@@ -163,8 +165,8 @@ server.get("/API/learning_resources/:resourceId", (req, res) => {
     });
     CRUD.getLearningResource(connection, resourceId, (rows) => {
         if (rows) {
-            rows.path = rows.path.replace("C:/Tesis ISIS/videosLu/Coursera/", "Coursera/");
-            rows.transcript = rows.path.replace(".mp4", ".es.srt");
+            rows.path = rows.path.replace("C:/Tesis ISIS/videosLu/frontend/public/Coursera/", "Coursera/");
+            rows.transcript = rows.path.replace(".mp4", ".vtt");
         }
         res.send(rows);
     });

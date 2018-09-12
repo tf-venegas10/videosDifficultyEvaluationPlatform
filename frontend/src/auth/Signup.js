@@ -12,6 +12,7 @@ export default class Signup extends Component {
             passwordS: "",
             name: "",
             lastName: "",
+            educationLevel: "1",
             onSubmit: this.props.onSubmit,
         };
     }
@@ -21,6 +22,7 @@ export default class Signup extends Component {
     }
 
     handleChange = (event) => {
+
         this.setState({
             [event.target.id]: event.target.value
         });
@@ -29,7 +31,7 @@ export default class Signup extends Component {
     handleSubmit = event => {
         event.preventDefault();
         if(this.state.emailS.endsWith("@uniandes.edu.co")) {
-            this.state.onSubmit(this.state.name, this.state.lastName, this.state.emailS, this.state.passwordS);
+            this.state.onSubmit(this.state.name, this.state.lastName, this.state.emailS, this.state.passwordS, this.state.educationLevel);
         }
     };
 
@@ -75,6 +77,22 @@ export default class Signup extends Component {
                                 onChange={this.handleChange}
                                 type="password"
                             />
+                        </FormGroup>
+                        <FormGroup controlId={this.state.educationLevel}>
+                            <ControlLabel>Select your education level (current studies)</ControlLabel>
+                            <FormControl componentClass="select" placeholder="select"
+                                         onChange={this.handleChange}>
+                                <option value="1">1st semester</option>
+                                <option value="2">2nd semester</option>
+                                <option value="3">3rd semester</option>
+                                <option value="4">4th semester</option>
+                                <option value="5">5th semester</option>
+                                <option value="6">6th semester</option>
+                                <option value="7">7th semester</option>
+                                <option value="8">8th semester</option>
+                                <option value="9">Master</option>
+                                <option value="10">Doctorate</option>
+                            </FormControl>
                         </FormGroup>
                         <Button
                             block
