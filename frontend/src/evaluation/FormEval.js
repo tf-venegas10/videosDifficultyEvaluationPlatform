@@ -112,28 +112,16 @@ export default class FormEval extends Component {
 
                         <div data-parent="#accordion">
                             <div className="card-body survey-part row">
-                                What was the level of dificulty you felt when seeing the video?
+                                What was the level of difficulty you felt when seeing the video?
                             </div>
                             <div className="card-body survey-part row">
                                 <div className="form-check form-check-inline col-sm-2">
-                                    <label htmlFor="VeryDifficult" className="form-check-label"><input
+                                    <label htmlFor="VeryEasy" className="form-check-label"><input
                                         className="form-check-input" type="radio"
-                                        checked={this.state.selectedDifficulty === "VeryDifficult"} id="VeryDifficult"
-                                        onClick={this.onSelect.bind(this, "VeryDifficult")}/>Very Difficult</label>
-                                </div>
-                                <div className="form-check form-check-inline col-sm-2">
-                                    <label htmlFor="Difficult" className="form-check-label"><input
-                                        className="form-check-input" type="radio"
-                                        checked={this.state.selectedDifficulty === "Difficult"}
-                                        id="Difficult"
-                                        onClick={this.onSelect.bind(this, "Difficult")}/> Difficult</label>
-                                </div>
-                                <div className="form-check form-check-inline col-sm-2">
-                                    <label htmlFor="Intermediate" className="form-check-label"><input
-                                        className="form-check-input" type="radio"
-                                        checked={this.state.selectedDifficulty === "Intermediate"}
-                                        id="Intermediate"
-                                        onClick={this.onSelect.bind(this, "Intermediate")}/>Intermediate</label>
+                                        checked={this.state.selectedDifficulty === "VeryEasy"}
+                                        value="" id="VeryEasy"
+                                        onClick={this.onSelect.bind(this, "VeryEasy")}/>Very
+                                        Easy</label>
                                 </div>
                                 <div className="form-check form-check-inline col-sm-2">
                                     <label htmlFor="Easy" className="form-check-label"><input
@@ -143,25 +131,39 @@ export default class FormEval extends Component {
                                         onClick={this.onSelect.bind(this, "Easy")}/>Easy</label>
                                 </div>
                                 <div className="form-check form-check-inline col-sm-2">
-                                    <label htmlFor="VeryEasy" className="form-check-label"><input
+                                    <label htmlFor="Intermediate" className="form-check-label"><input
                                         className="form-check-input" type="radio"
-                                        checked={this.state.selectedDifficulty === "VeryEasy"}
-                                        value="" id="VeryEasy"
-                                        onClick={this.onSelect.bind(this, "VeryEasy")}/>Very
-                                        Easy</label>
+                                        checked={this.state.selectedDifficulty === "Intermediate"}
+                                        id="Intermediate"
+                                        onClick={this.onSelect.bind(this, "Intermediate")}/>Intermediate</label>
+                                </div>
+                                <div className="form-check form-check-inline col-sm-2">
+                                    <label htmlFor="Difficult" className="form-check-label"><input
+                                        className="form-check-input" type="radio"
+                                        checked={this.state.selectedDifficulty === "Difficult"}
+                                        id="Difficult"
+                                        onClick={this.onSelect.bind(this, "Difficult")}/> Difficult</label>
+                                </div>
+                                <div className="form-check form-check-inline col-sm-2">
+                                    <label htmlFor="VeryDifficult" className="form-check-label"><input
+                                        className="form-check-input" type="radio"
+                                        checked={this.state.selectedDifficulty === "VeryDifficult"} id="VeryDifficult"
+                                        onClick={this.onSelect.bind(this, "VeryDifficult")}/>Very Difficult</label>
                                 </div>
 
 
+
                             </div>
                             <div className="card-body survey-part row">
-                                What was your level of knowledge of the topics treated?
+                                How well did you know the topics treated in the video?
                             </div>
                             <div className="card-body survey-part row">
                                 <div className="form-check form-check-inline col-sm-2">
-                                    <label htmlFor="Unknown" className="form-check-label"><input
+                                    <label htmlFor="veryKnown" className="form-check-label"><input
                                         className="form-check-input" type="radio"
-                                        checked={this.state.selectedKnowledge === "Unknown"} id="Unknown"
-                                        onClick={this.onSelectKnowledge.bind(this, "Unknown")}/>Unknown</label>
+                                        checked={this.state.selectedKnowledge === "veryKnown"}
+                                        id="veryKnown"
+                                        onClick={this.onSelectKnowledge.bind(this, "veryKnown")}/>Very known</label>
                                 </div>
                                 <div className="form-check form-check-inline col-sm-2">
                                     <label htmlFor="Familiar" className="form-check-label"><input
@@ -171,17 +173,15 @@ export default class FormEval extends Component {
                                         onClick={this.onSelectKnowledge.bind(this, "Familiar")}/> Familiar</label>
                                 </div>
                                 <div className="form-check form-check-inline col-sm-2">
-                                    <label htmlFor="veryKnown" className="form-check-label"><input
+                                    <label htmlFor="Unknown" className="form-check-label"><input
                                         className="form-check-input" type="radio"
-                                        checked={this.state.selectedKnowledge === "veryKnown"}
-                                        id="veryKnown"
-                                        onClick={this.onSelectKnowledge.bind(this, "veryKnown")}/>Very known</label>
+                                        checked={this.state.selectedKnowledge === "Unknown"} id="Unknown"
+                                        onClick={this.onSelectKnowledge.bind(this, "Unknown")}/>Unknown</label>
                                 </div>
-
 
                             </div>
                             <div className="card-body survey-part row">
-                                What topics did you identified on the video?
+                                What topics did you identify on the video?
                             </div>
 
 

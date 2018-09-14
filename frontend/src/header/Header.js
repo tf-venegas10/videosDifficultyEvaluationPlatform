@@ -18,14 +18,14 @@ export default class Header extends Component {
                 <nav
                     className="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar bg-dark box-shadow sticky-top">
                     <div className="container">
-                        <a href="" className="navbar-brand mr-0 mr-md-5"><strong>ALMA-DAJEE
-                            Evaluation</strong></a>
+                        <strong>ALMA-DAJEE
+                            Evaluation</strong>
 
                         {this.props.user.is_authenticated ?
                             <div className="navbar-nav-scroll">
                                 <ul className="navbar-nav bd-navbar-nav flex-row">
                                     <li className="nav-item mr-3">
-                                        <a className="nav-link" title="">Hi, {this.props.user.userName}!</a>
+                                        <strong>Hi, {this.props.user.userName}!</strong>
                                     </li>
                                     {(this.props.user.evaluations.length > 0) ?
                                         <li className="nav-item mr-3">

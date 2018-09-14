@@ -39,7 +39,29 @@ function shuffle(a) {
 exports.getLearningResources = (connection,educationlevel, callback) => {
     connection.connect();
     //Courses: algorithms-part1, intro-programming, JAVA programming design principles
-    if(educationlevel<5) {
+    if(educationlevel<3) {
+        connection.query('SELECT L.ID FROM (VIDEO_QUALIFICATION Q INNER JOIN LEARNING_RESOURCES L ON Q.VIDEO_ID = L.ID) ' +
+            'INNER JOIN VIDEO_DURATION D ON D.VIDEO_ID=Q.VIDEO_ID ' +
+            'WHERE QUALIFICATION_AMOUNT<3 AND ( ID BETWEEN 3246 AND 3297 OR ID BETWEEN 5403 AND 5473 OR ID BETWEEN 875 AND 980) AND D.VALUE<8 AND D.VALUE>4;', (err, rows, fields) => {
+            if (err) {
+                console.log(err);
+                throw new Error("Something went wrong with DB");
+            }
+            if (rows) {
+                console.log("RESOURCES OBTAINED");
+                let ids = [];
+                rows.forEach((r) => {
+                    ids.push(r.ID);
+                });
+                ids = shuffle(ids);
+                let res = {};
+                res.ids = ids;
+                callback(res);
+            }
+        });
+        connection.end();
+    }
+    else if(educationlevel<5) {
         connection.query('SELECT L.ID FROM (VIDEO_QUALIFICATION Q INNER JOIN LEARNING_RESOURCES L ON Q.VIDEO_ID = L.ID) ' +
             'INNER JOIN VIDEO_DURATION D ON D.VIDEO_ID=Q.VIDEO_ID ' +
             'WHERE QUALIFICATION_AMOUNT<3 AND (ID BETWEEN 5126 AND 5172 ' +
@@ -62,11 +84,35 @@ exports.getLearningResources = (connection,educationlevel, callback) => {
         });
         connection.end();
     }
+    else if(educationlevel<7){
+        connection.query('SELECT L.ID FROM (VIDEO_QUALIFICATION Q INNER JOIN LEARNING_RESOURCES L ON Q.VIDEO_ID = L.ID) ' +
+            'INNER JOIN VIDEO_DURATION D ON D.VIDEO_ID=Q.VIDEO_ID ' +
+            'WHERE QUALIFICATION_AMOUNT<3 AND (ID BETWEEN 5173 AND 5233 ' +
+            'OR ID BETWEEN 5173 AND 5233 OR ID BETWEEN 715 AND 758) AND D.VALUE<8 AND D.VALUE>4;', (err, rows, fields) => {
+            if (err) {
+                console.log(err);
+                throw new Error("Something went wrong with DB");
+            }
+            if (rows) {
+                console.log("RESOURCES OBTAINED");
+                let ids = [];
+                rows.forEach((r) => {
+                    ids.push(r.ID);
+                });
+                ids = shuffle(ids);
+                let res = {};
+                res.ids = ids;
+                callback(res);
+            }
+        });
+        connection.end();
+    }
     else {
         connection.query('SELECT L.ID FROM (VIDEO_QUALIFICATION Q INNER JOIN LEARNING_RESOURCES L ON Q.VIDEO_ID = L.ID) ' +
             'INNER JOIN VIDEO_DURATION D ON D.VIDEO_ID=Q.VIDEO_ID ' +
             'WHERE QUALIFICATION_AMOUNT<3 AND (ID BETWEEN 5234 AND 5276 ' +
-            'OR ID BETWEEN 5234 AND 5276) AND D.VALUE<8 AND D.VALUE>4;', (err, rows, fields) => {
+            'OR ID BETWEEN 5173 AND 5233 OR ID BETWEEN 653 AND 655' +
+            ' OR ID BETWEEN 666 AND 668 OR ID BETWEEN 715 AND 758) AND D.VALUE<8 AND D.VALUE>4;', (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 throw new Error("Something went wrong with DB");

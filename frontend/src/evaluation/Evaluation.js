@@ -64,7 +64,7 @@ export default class Evaluation extends Component {
                                         played: 0,
                                         playedSeconds: 0,
                                         startTime: null,
-                                        finishTime: null
+                                        endTime: null
                                     }
                                 });
                             })
