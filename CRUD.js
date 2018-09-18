@@ -88,7 +88,7 @@ exports.getLearningResources = (connection,educationlevel, callback) => {
         connection.query('SELECT L.ID FROM (VIDEO_QUALIFICATION Q INNER JOIN LEARNING_RESOURCES L ON Q.VIDEO_ID = L.ID) ' +
             'INNER JOIN VIDEO_DURATION D ON D.VIDEO_ID=Q.VIDEO_ID ' +
             'WHERE QUALIFICATION_AMOUNT<3 AND (ID BETWEEN 5173 AND 5233 ' +
-            'OR ID BETWEEN 5173 AND 5233 OR ID BETWEEN 715 AND 758) AND D.VALUE<8 AND D.VALUE>4;', (err, rows, fields) => {
+            'OR ID BETWEEN 5173 AND 5233 OR ID BETWEEN 715 AND 725) AND D.VALUE<8 AND D.VALUE>4;', (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 throw new Error("Something went wrong with DB");
@@ -112,7 +112,7 @@ exports.getLearningResources = (connection,educationlevel, callback) => {
             'INNER JOIN VIDEO_DURATION D ON D.VIDEO_ID=Q.VIDEO_ID ' +
             'WHERE QUALIFICATION_AMOUNT<3 AND (ID BETWEEN 5234 AND 5276 ' +
             'OR ID BETWEEN 5173 AND 5233 OR ID BETWEEN 653 AND 655' +
-            ' OR ID BETWEEN 666 AND 668 OR ID BETWEEN 715 AND 758) AND D.VALUE<8 AND D.VALUE>4;', (err, rows, fields) => {
+            ' OR ID BETWEEN 666 AND 668 OR ID BETWEEN 715 AND 725) AND D.VALUE<8 AND D.VALUE>4;', (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 throw new Error("Something went wrong with DB");

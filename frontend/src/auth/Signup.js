@@ -78,7 +78,7 @@ export default class Signup extends Component {
                                 type="password"
                             />
                         </FormGroup>
-                        <FormGroup controlId={this.state.educationLevel}>
+                        <FormGroup controlId={"educationLevel"}>
                             <ControlLabel>Select your education level (current studies)</ControlLabel>
                             <FormControl componentClass="select" placeholder="select"
                                          onChange={this.handleChange}>

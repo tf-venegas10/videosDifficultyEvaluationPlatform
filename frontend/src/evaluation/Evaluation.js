@@ -15,7 +15,8 @@ export default class Evaluation extends Component {
             resource: {},
             play: false,
             showEval: false,
-            time: 0
+            time: 0,
+            freqUpdate: 0
         };
         this.toggleVideo = this.toggleVideo.bind(this);
         this.onStartCallback = this.onStartCallback.bind(this);
@@ -65,7 +66,8 @@ export default class Evaluation extends Component {
                                         playedSeconds: 0,
                                         startTime: null,
                                         endTime: null
-                                    }
+                                    },
+                                    freqUpdate: 0
                                 });
                             })
                             .catch((err) => {
@@ -118,7 +120,7 @@ export default class Evaluation extends Component {
             let tuple = {
                 startTime: pastTime,
                 endTime: seconds
-            }
+            };
             pastTime -= seconds;
             prevState.resource.seeksInterval.push(tuple);
             if(pastTime>0) {
@@ -133,7 +135,10 @@ export default class Evaluation extends Component {
     onProgressCallback(info) {
         this.setState((prevState)=>{
             prevState.resource.played = info.played;
-            prevState.resource.playedSeconds = info.playedSeconds;
+            if(prevState.freqUpdate%3 === 0){
+                prevState.resource.playedSeconds = info.playedSeconds;
+            }
+            prevState.freqUpdate++;
             return prevState;
         });
     }

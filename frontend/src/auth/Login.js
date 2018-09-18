@@ -22,14 +22,14 @@ export default class Login extends Component {
         this.setState({
             [event.target.id]: event.target.value
         });
-    }
+    };
 
     handleSubmit = event => {
         event.preventDefault();
         if(this.state.email.endsWith("@uniandes.edu.co")){
             this.state.onSubmit(this.state.email, this.state.password);
         }
-    }
+    };
 
     render() {
         return (

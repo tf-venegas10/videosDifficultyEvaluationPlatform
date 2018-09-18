@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import "./FormEval.css";
 import Select from 'react-select';
+import $ from "jquery";
 // App component - represents the whole app
 
 export default class FormEval extends Component {
@@ -27,6 +28,12 @@ export default class FormEval extends Component {
     }
 
     componentDidMount() {
+        $(".concept-section").on("keypress", (event) => {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+            }
+        });
+
         fetch("/API/concepts")
             .then(res => {
                 return (res.json());
@@ -35,7 +42,7 @@ export default class FormEval extends Component {
                 this.setState({concepts: concepts});
             })
             .catch((err) => console.log(err));
-        if(this.props.videoId) {
+        if (this.props.videoId) {
             fetch("/API/concepts/" + this.props.videoId)
                 .then(res => {
                     console.log(res);
@@ -45,7 +52,7 @@ export default class FormEval extends Component {
                     let selected = [];
                     concepts.forEach((c) => {
                         console.log(c);
-                        selected.push({value: c.uri, label: c.label });
+                        selected.push({value: c.uri, label: c.label});
                     });
                     this.setState({selected: selected});
                 })
@@ -76,6 +83,12 @@ export default class FormEval extends Component {
 
         } else {
             this.setState({missingSelection: true});
+        }
+    }
+
+    onKeyPress(event) {
+        if (event.which === 13 /* Enter */) {
+            event.preventDefault();
         }
     }
 
@@ -152,7 +165,6 @@ export default class FormEval extends Component {
                                 </div>
 
 
-
                             </div>
                             <div className="card-body survey-part row">
                                 How well did you know the topics treated in the video?
@@ -184,17 +196,18 @@ export default class FormEval extends Component {
                                 What topics did you identify on the video?
                             </div>
 
-
-                            <Select
-                                value={this.state.selected}
-                                isMulti
-                                name="topics"
-                                allowCreate={true}
-                                options={listConcepts}
-                                className="basic-multi-select"
-                                classNamePrefix="select"
-                                onChange={this.handleChange.bind(this)}
-                            />
+                            <div className="concept-section">
+                                <Select
+                                    value={this.state.selected}
+                                    isMulti
+                                    name="topics"
+                                    allowCreate={true}
+                                    options={listConcepts}
+                                    className="basic-multi-select"
+                                    classNamePrefix="select"
+                                    onChange={this.handleChange.bind(this)}
+                                />
+                            </div>
                             {warnning}
                             <div className="text-center">
                                 <button type="button" className="btn btn-info partial-validation submit"
