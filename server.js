@@ -27,6 +27,9 @@ server.get("/API/login/:userData", (req, res) => {
     let encoded = req.params.userData;
     let decoded = base64.decode(encoded);
     let params = utf8.decode(decoded).split(";;;");
+    let bytes = utf8.encode(params[1]);
+    let password = base64.encode(bytes);
+    console.log(password);
 
     let connection = mysql.createConnection({
         insecureAuth: true,
@@ -42,11 +45,11 @@ server.get("/API/login/:userData", (req, res) => {
             throw new Error("Something went wrong with DB");
         }
         let user = null;
-        if (rows[0] && rows[0].PASSWORD === params[1]) {
+        if (rows[0] && rows[0].PASSWORD === password) {
             user = {
                 id: rows[0].ID,
                 name: rows[0].NAME,
-                lastname:rows[0].LASTNAME,
+                lastname: rows[0].LASTNAME,
                 educationLevel: rows[0].EDUCATIONLEVEL,
                 email: params[0]
             };
@@ -57,10 +60,47 @@ server.get("/API/login/:userData", (req, res) => {
     connection.end();
 });
 
+function fixPasswords() {
+    let connection = mysql.createConnection({
+        insecureAuth: true,
+        host: "localhost",
+        user: "root",
+        password: process.env.DB_PW,
+        database: "dajee"
+    });
+    connection.query('SELECT * FROM USERS;', (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        rows.forEach((r) => {
+            let bytes = base64.decode(r.PASSWORD);
+            let password = utf8.decode(bytes);
+            let con2 = mysql.createConnection({
+                insecureAuth: true,
+                host: "localhost",
+                user: "root",
+                password: process.env.DB_PW,
+                database: "dajee"
+            });
+            con2.query("UPDATE USERS set PASSWORD=\'" + password + "\' WHERE ID=" + r.ID + ";", (err2, rows2, fields2) => {
+                if (err2) {
+                    console.log(err2);
+                    return;
+                }
+            });
+            con2.end();
+        });
+    });
+    connection.end();
+}
+
 server.get("/API/signup/:userData", (req, res) => {
     let encoded = req.params.userData;
     let decoded = base64.decode(encoded);
     let params = utf8.decode(decoded).split(";;;");
+    let bytes = utf8.encode(params[3]);
+    let password = base64.encode(bytes);
 
     let connection = mysql.createConnection({
         insecureAuth: true,
@@ -72,7 +112,7 @@ server.get("/API/signup/:userData", (req, res) => {
     connection.connect();
     try {
         connection.query('INSERT INTO USERS (NAME, LASTNAME, EMAIL, PASSWORD, EDUCATIONLEVEL) ' +
-            'VALUES (\'' + params[0] + '\',\'' + params[1] + '\',\'' + params[2] + '\',\'' + params[3] + '\',\'' + params[4] + '\');', (err, rows, fields) => {
+            'VALUES (\'' + params[0] + '\',\'' + params[1] + '\',\'' + params[2] + '\',\'' + password + '\',\'' + params[4] + '\');', (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 throw err;
@@ -87,7 +127,7 @@ server.get("/API/signup/:userData", (req, res) => {
             let user = {
                 id: rows[0].ID,
                 name: rows[0].NAME,
-                lastname:rows[0].LASTNAME,
+                lastname: rows[0].LASTNAME,
                 educationLevel: rows[0].EDUCATIONLEVEL,
                 email: params[1]
             };
@@ -142,10 +182,10 @@ server.get("/API/learning_resources/level/:level", (req, res) => {
         database: "dajee"
     });
     CRUD.getLearningResources(connection, req.params.level, (rows) => {
-        if(rows) {
+        if (rows) {
             res.send(rows.ids);
         }
-        else{
+        else {
             res.send([]);
         }
     });
