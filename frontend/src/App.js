@@ -107,10 +107,12 @@ class App extends Component {
         let encoded = Base64.encode(bytes);
         fetch("/API/signup/" + encoded)
             .then((res) => {
-                console.log(res);
                 return (res.json());
             })
             .then((user) => {
+                console.log(user);
+                if(!user)
+                    throw new Error("User not exists");
                 this.setState(() => {
                         return {
                             user: {

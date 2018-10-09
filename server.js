@@ -29,7 +29,6 @@ server.get("/API/login/:userData", (req, res) => {
     let params = utf8.decode(decoded).split(";;;");
     let bytes = utf8.encode(params[1]);
     let password = base64.encode(bytes);
-    console.log(password);
 
     let connection = mysql.createConnection({
         insecureAuth: true,
@@ -71,6 +70,7 @@ function fixPasswords() {
     connection.query('SELECT * FROM USERS;', (err, rows, fields) => {
         if (err) {
             console.log(err);
+            res.send(null);
             return;
         }
         rows.forEach((r) => {
@@ -86,6 +86,7 @@ function fixPasswords() {
             con2.query("UPDATE USERS set PASSWORD=\'" + password + "\' WHERE ID=" + r.ID + ";", (err2, rows2, fields2) => {
                 if (err2) {
                     console.log(err2);
+                    res.send(null);
                     return;
                 }
             });
@@ -111,36 +112,50 @@ server.get("/API/signup/:userData", (req, res) => {
     });
     connection.connect();
     try {
+        let error = false;
         connection.query('INSERT INTO USERS (NAME, LASTNAME, EMAIL, PASSWORD, EDUCATIONLEVEL) ' +
             'VALUES (\'' + params[0] + '\',\'' + params[1] + '\',\'' + params[2] + '\',\'' + password + '\',\'' + params[4] + '\');', (err, rows, fields) => {
             if (err) {
-                console.log(err);
-                throw err;
-            }
-        });
-        connection.query('SELECT * FROM USERS WHERE EMAIL=\'' + params[2] + '\';', (err, rows, fields) => {
-            if (err) {
-                console.log(err);
+                //console.log(err);
+                res.send(null);
+                error = true;
                 return;
             }
-            console.log(rows[0]);
-            let user = {
-                id: rows[0].ID,
-                name: rows[0].NAME,
-                lastname: rows[0].LASTNAME,
-                educationLevel: rows[0].EDUCATIONLEVEL,
-                email: params[1]
-            };
+            function sendData() {
+                let col = mysql.createConnection({
+                    insecureAuth: true,
+                    host: "localhost",
+                    user: "root",
+                    password: process.env.DB_PW,
+                    database: "dajee"
+                });
+                col.connect();
+                col.query('SELECT * FROM USERS WHERE EMAIL=\'' + params[2] + '\';', (err, rows, fields) => {
+                    if (err) {
+                        console.log(err);
+                        res.send(null);
+                        return;
+                    }
+                    console.log("ESTO SIGUE");
+                    let user = {
+                        id: rows[0].ID,
+                        name: rows[0].NAME,
+                        lastname: rows[0].LASTNAME,
+                        educationLevel: rows[0].EDUCATIONLEVEL,
+                        email: params[1]
+                    };
 
-            res.send(user);
+                    res.send(user);
+                });
+                col.end();
+            }
+            sendData();
         });
-    } catch (err) {
-        console.log(err);
-        res.send(err);
-    } finally {
-        connection.end();
+    } catch (e) {
+        // console.log(e);
+        //throw new Error("User already exists");
     }
-
+    connection.end();
 });
 
 server.get("/API/concepts", (req, res) => {
